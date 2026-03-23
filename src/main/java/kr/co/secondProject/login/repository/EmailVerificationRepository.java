@@ -1,4 +1,4 @@
-package kr.co.secondProject.repository;
+package kr.co.secondProject.login.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

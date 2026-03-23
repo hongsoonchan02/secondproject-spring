@@ -1,6 +1,6 @@
-package kr.co.secondProject.repository;
+package kr.co.secondProject.login.repository;
 
-import kr.co.secondProject.entity.Attendance;
+import kr.co.secondProject.login.entity.Attendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

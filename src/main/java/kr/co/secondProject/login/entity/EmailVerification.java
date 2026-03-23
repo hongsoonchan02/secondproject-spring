@@ -1,4 +1,4 @@
-package kr.co.secondProject.entity;
+package kr.co.secondProject.login.entity;
 
 
 import jakarta.persistence.*;
