@@ -1,4 +1,4 @@
-package kr.co.secondProject.service;
+package kr.co.secondProject.login.service;
 
 import kr.co.secondProject.login.dto.LoginReqDTO;
 import kr.co.secondProject.login.dto.LoginResDTO;
