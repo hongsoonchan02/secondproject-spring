@@ -3,6 +3,9 @@ package kr.co.secondProject.login.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.secondProject.login.dto.EmailReqDTO;
+import kr.co.secondProject.login.dto.ResetPasswordReqDTO;
+import kr.co.secondProject.login.dto.VerifyCodeReqDTO;
 import kr.co.secondProject.login.service.PasswordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,4 +28,19 @@ public class PasswordController {
         return ResponseEntity.ok("인증코드가 발송됐습니다.");
     }
 
+    //2. 인증코드 확인
+    @Operation(summary = "인증코드 확인", description = "인증코드가 올바른지 확인합니다.")
+    @PostMapping("/verify")
+    public ResponseEntity<String> resetPassword(@RequestBody VerifyCodeReqDTO req) {
+        passwordService.verifyCode(req);
+        return ResponseEntity.ok("인증이 완료됐습니다.");
+    }
+
+    //3. 새 비밀번호 설정
+    @Operation(summary = "비밀번호 재설정", description = "새 비밀번호로 변경합니다.")
+    @PostMapping("/reset")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordReqDTO req) {
+        passwordService.resetPassword(req);
+        return ResponseEntity.ok("비밀번호가 변경됐습니다.");
+    }
 }
