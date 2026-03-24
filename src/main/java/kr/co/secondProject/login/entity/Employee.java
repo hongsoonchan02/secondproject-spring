@@ -39,4 +39,8 @@ public class Employee {
     private String position;    //직책
 
     private Long dpNum;        // 부서코드(FK)
+
+    public void updatePassword(String newPassword){
+        this.password = newPassword;
+    }
 }
