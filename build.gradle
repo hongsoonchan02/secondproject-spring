@@ -34,6 +34,9 @@ dependencies {
 	implementation 'org.projectlombok:lombok:1.18.42'
 	annotationProcessor 'org.projectlombok:lombok:1.18.42'
 	compileOnly 'org.projectlombok:lombok:1.18.42'
+
+	//DB때문에 임시로 H2사용. DB서버 만들어지면 지울예정
+	runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
