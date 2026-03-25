@@ -41,3 +41,14 @@ jobs:
               \"aws s3 cp s3://${{ secrets.BACKEND_BUCKET }}/app.jar /home/ec2-user/app/app.jar\",
               \"bash /home/ec2-user/app/deploy.sh\"
             ]"
+
+      - name: .env 파일 생성
+        run: |
+              echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> .env
+              echo "DB_URL=${{ secrets.DB_URL }}" >> .env
+              echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+              echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+              echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+              echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+              echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
+              echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
