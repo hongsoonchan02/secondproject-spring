@@ -11,7 +11,7 @@ public interface DepartmentService {
 	
 	public List<ResDepartmentListDTO> departmentSerch(String keyword);
 	
-	public void departmentUpdate(Long id, ReqDepartmentUpdateDTO request);
+	public ResDepartmentUpdateDTO departmentUpdate(Long id, ReqDepartmentUpdateDTO request);
 	
 	public void departmentDelete(Long id);
 

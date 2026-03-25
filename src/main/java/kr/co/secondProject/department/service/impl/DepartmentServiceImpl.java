@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.secondProject.department.dto.ReqDepartmentUpdateDTO;
 import kr.co.secondProject.department.dto.ResDepartmentListDTO;
+import kr.co.secondProject.department.dto.ResDepartmentUpdateDTO;
 import kr.co.secondProject.department.entity.Department;
 import kr.co.secondProject.department.repository.DepartmentRepository;
 import kr.co.secondProject.department.service.DepartmentService;
@@ -54,13 +55,22 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 	
 	// 부서 관리(수정)
-	public void departmentUpdate(Long id, ReqDepartmentUpdateDTO request) {
+	public ResDepartmentUpdateDTO departmentUpdate(Long id, ReqDepartmentUpdateDTO request) {
 		Department updated = departmentRepository.findById(id).orElse(null);
 		if (updated != null) {
-			                                       // EmployeeRepository에 구현해야함
+			                                      // EmployeeRepository에 구현해야함
 			Employee empEntity = employeeRepository.findByEmpId(request.getDpManagerEmpNum()).orElse(null);
 			updated.update(request.getDpName(), request.getDpDetail(), empEntity);
-			departmentRepository.save(updated);
+			Department saveData = departmentRepository.save(updated);
+			ResDepartmentUpdateDTO response = ResDepartmentUpdateDTO.builder()
+					.dpCode(saveData.getDpCode())
+					.dpName(saveData.getDpName())
+					.dpNum(saveData.getDpNum())
+					.dpDetail(saveData.getDpDetail())
+					.dpManager(saveData.getDpManager().getName())
+					.build();
+			return response;
+			
 		}
 	}
 	
