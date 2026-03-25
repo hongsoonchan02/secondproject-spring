@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReqDepartmentListDTO {
-	
-	private String dpCode; 
+@Builder
+public class ReqDepartmentUpdateDTO {
+
 	private String dpName;
-	private Long dpManager;
 	private String dpDetail;
+	private String dpManagerName;
+	private String dpManagerEmpNum;
 
 }

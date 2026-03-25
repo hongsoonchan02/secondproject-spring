@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResDepartmentListDTO {
+public class ResDepartmentUpdateDTO {
 
 	private String dpCode; // 부서 코드
 	private String dpName; // 부서 이름
@@ -19,5 +19,4 @@ public class ResDepartmentListDTO {
 	private String dpManagerDetail; // 부서 관리자 설명
 	private int dpMember; // 부서 인원
 	private String dpManagerNum; // 부서 관리자 사번
-	
 }
