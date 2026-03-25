@@ -15,5 +15,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     //특정 직원의 오늘 근태 기록 조회
     Optional<Attendance> findByEmployeeIdAndDate(Long employeeId, LocalDateTime date);
 
+    // 특정 직원의 특정 기간 근태 기록 조회 (월별 조회 등에 활용)
+    List<Attendance> findByEmployeeIdAndDateBetween(Long employeeId, LocalDateTime startDate, LocalDateTime endDate);
 
 }
