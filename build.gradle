@@ -22,7 +22,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'org.projectlombok:lombok:1.18.38'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -30,16 +29,10 @@ dependencies {
 	implementation 'com.mysql:mysql-connector-j:8.3.0'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
-<<<<<<< HEAD
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
-	
-=======
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
-
->>>>>>> 145975b54b118b62aece3a69a9a2baf68f92a91c
 	implementation 'org.projectlombok:lombok:1.18.42'
 	annotationProcessor 'org.projectlombok:lombok:1.18.42'
 	compileOnly 'org.projectlombok:lombok:1.18.42'
