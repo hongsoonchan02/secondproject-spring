@@ -1,6 +1,6 @@
-package kr.co.secondProject.repository;
+package kr.co.secondProject.login.repository;
 
-import kr.co.secondProject.entity.Employee;
+import kr.co.secondProject.login.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
