@@ -24,10 +24,11 @@ jobs:
 
       - name: .env 파일 생성
         run: |
-        echo "DB_DRIVER: ${{ secrets.DB_DRIVER }}" >> .env
-        echo "DB_URL: ${{ secrets.DB_URL }}" >> .env
-        echo "DB_USERNAME: ${{ secrets.DB_USERNAME }}" >> .env
-        echo "DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> .env   
+          echo "" > .env
+          echo "DB_DRIVER: ${{ secrets.DB_DRIVER }}" >> .env
+          echo "DB_URL: ${{ secrets.DB_URL }}" >> .env
+          echo "DB_USERNAME: ${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> .env   
 
       - name: Build JAR
         run: |
