@@ -19,8 +19,16 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}      
+          role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}         
+          aws-region: ${{ secrets.AWS_REGION }}   
+
+      - name: .env 파일 생성
+        run: |
+          echo "" > .env
+          echo "DB_DRIVER: ${{ secrets.DB_DRIVER }}" >> .env
+          echo "DB_URL: ${{ secrets.DB_URL }}" >> .env
+          echo "DB_USERNAME: ${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> .env   
 
       - name: Build JAR
         run: |
@@ -31,6 +39,7 @@ jobs:
         run: |
           JAR_FILE=$(ls build/libs/*.jar | grep -v plain)
           aws s3 cp "$JAR_FILE" s3://${{ secrets.BACKEND_BUCKET }}/app.jar
+          aws s3 cp .env s3://${{ secrets.BACKEND_BUCKET }}/.env
 
       - name: Deploy via SSMs
         run: |
@@ -39,6 +48,7 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --parameters commands="[
               \"aws s3 cp s3://${{ secrets.BACKEND_BUCKET }}/app.jar /home/ec2-user/app/app.jar\",
+              \"aws s3 cp s3://${{ secrets.BACKEND_BUCKET }}/.env /home/ec2-user/app/.env\",
               \"bash /home/ec2-user/app/deploy.sh\"
             ]"
 
