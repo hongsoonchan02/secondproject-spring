@@ -7,13 +7,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
-/**
- * 비동기(@Async) 처리 설정 클래스
- *
- * ※ 추가 어노테이션 설명:
- *  - @EnableAsync : 스프링의 @Async 기능을 활성화
- *                   이 어노테이션이 없으면 @Async가 무시되고 동기 방식으로 실행됨
- */
+
 @Configuration
 @EnableAsync
 public class Acyncconfig {

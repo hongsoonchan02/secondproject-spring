@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 /**
  * 근태 이력 조회 응답 DTO
- * Attendance.jsx 테이블 컬럼에 맞게 구성:
  * 날짜 / 출근시각 / 퇴근시각 / 근무시간 / 상태
  */
 @Data
