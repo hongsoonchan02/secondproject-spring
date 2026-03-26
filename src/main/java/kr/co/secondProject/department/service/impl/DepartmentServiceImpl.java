@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import kr.co.secondProject.department.dto.ReqDepartmentCreateDTO;
 import kr.co.secondProject.department.dto.ReqDepartmentUpdateDTO;
+import kr.co.secondProject.department.dto.ResDepartmentCreateDTO;
 import kr.co.secondProject.department.dto.ResDepartmentListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentUpdateDTO;
 import kr.co.secondProject.department.entity.Department;
@@ -21,6 +24,21 @@ public class DepartmentServiceImpl implements DepartmentService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final DepartmentRepository departmentRepository;
+	
+	// 부서 생성
+	public ResDepartmentCreateDTO departmentCreate(ReqDepartmentCreateDTO dto) {
+		                                     // EmployeeRepository에서 구현해야함
+		Employee manager = employeeRepository.findByEmpNum(dto.getDpManagerEmpNum()).orElse(null);
+		Department dpEntity = Department.builder()
+				.dpCode(dto.getDpCode())
+				.dpName(dto.getDpName())
+				.dpDetail(dto.getDpDetail())
+				.dpManager(manager)
+				.build();
+		departmentRepository.save(dpEntity);
+		
+		return ResDepartmentCreateDTO.toDto(dpEntity);
+	}
 	
 	// 부서 리스트 조회
 	public List<ResDepartmentListDTO> departmentList() {
@@ -70,7 +88,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 					.dpManager(saveData.getDpManager().getName())
 					.build();
 			return response;
-			
 		}
 	}
 	

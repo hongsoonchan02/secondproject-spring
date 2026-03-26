@@ -1,5 +1,12 @@
 package kr.co.secondProject.login.service;
 
+import java.time.LocalDateTime;
+import java.util.Random;
+
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+
 import kr.co.secondProject.login.dto.ResetPasswordReqDTO;
 import kr.co.secondProject.login.dto.VerifyCodeReqDTO;
 import kr.co.secondProject.login.entity.EmailVerification;
@@ -7,12 +14,6 @@ import kr.co.secondProject.login.entity.Employee;
 import kr.co.secondProject.login.repository.EmailVerificationRepository;
 import kr.co.secondProject.login.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor

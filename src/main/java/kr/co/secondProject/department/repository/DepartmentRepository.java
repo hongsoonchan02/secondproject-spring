@@ -10,5 +10,4 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
 	public List<Department> findByDpNameContaining(String keyword);
 	
-	public boolean existsByDpCode(String dpCode);
 }
