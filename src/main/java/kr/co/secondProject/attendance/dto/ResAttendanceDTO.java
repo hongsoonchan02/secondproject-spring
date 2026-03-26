@@ -1,8 +1,13 @@
 package kr.co.secondProject.attendance.dto;
 
-import lombok.*;
-
 import java.time.LocalDateTime;
+
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 근태 이력 조회 응답 DTO
@@ -15,6 +20,8 @@ public class ResAttendanceDTO {
 
     private Long attendanceId;      // 근태 코드
 
+    @ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="id")
     private Long employeeId;        // 직원 ID
 
     private String employeeName;    // 직원 이름 (표시용)

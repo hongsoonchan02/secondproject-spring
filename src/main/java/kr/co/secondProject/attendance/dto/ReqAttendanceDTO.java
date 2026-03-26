@@ -1,8 +1,13 @@
 package kr.co.secondProject.attendance.dto;
 
-import lombok.*;
-
 import java.time.LocalDateTime;
+
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 출근/퇴근 등록 및 수정 요청 DTO
@@ -12,6 +17,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReqAttendanceDTO {
 
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="board_id")
     private Long employeeId;        // 직원 ID
 
     private LocalDateTime date;     // 날짜
