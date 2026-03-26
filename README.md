@@ -22,7 +22,7 @@
 
 - 프론트/백엔드 분리 구조
 - AWS 기반 인프라
-- GitActions CI/CD 파이프라인
+- CI/CD (OIDC 기반 배포 파이프라인)
 
 ---
 
@@ -62,6 +62,8 @@
 - Lombok
 - Validation
 - Swagger
+- JavaMailSender
+- dotenv
 
 ### Infra
 - AWS EC2
