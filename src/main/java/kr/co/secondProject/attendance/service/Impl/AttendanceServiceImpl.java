@@ -2,6 +2,7 @@ package kr.co.secondProject.attendance.service.Impl;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import kr.co.secondProject.attendance.dto.AttendanceStatsDto;
 import kr.co.secondProject.attendance.dto.ReqAttendanceDTO;
 import kr.co.secondProject.attendance.dto.ResAttendanceDTO;
 import kr.co.secondProject.attendance.sevice.AttendanceService;
@@ -26,6 +28,42 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final EmployeeRepository   employeeRepository;
 
+    
+    // 이번 달 근태 통계 조회 (비동기)
+    //  - 출근 일수 : state = "정상" 또는 "지각"
+    //  - 지각 횟수 : state = "지각"
+    //  - 결근 일수 : state = "결근"
+    //  - 근태 점수 : (출근 일수 / 이번 달 총 일수) × 100
+    @Async
+    @Override
+    public CompletableFuture<AttendanceStatsDto> getAttendanceStats(Long employeeId) {
+
+        LocalDateTime startOfMonth = YearMonth.now().atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth   = YearMonth.now().atEndOfMonth().atTime(23, 59, 59);
+
+        List<Attendance> monthList = attendanceRepository
+                .findByEmployee_IdAndDateBetween(employeeId, startOfMonth, endOfMonth);
+
+        int workDays = (int) monthList.stream()
+                .filter(a -> "정상".equals(a.getState()) || "지각".equals(a.getState()))
+                .count();
+
+        int lateDays = (int) monthList.stream()
+                .filter(a -> "지각".equals(a.getState()))
+                .count();
+
+        int absentDays = (int) monthList.stream()
+                .filter(a -> "결근".equals(a.getState()))
+                .count();
+
+        int    totalDays = YearMonth.now().lengthOfMonth();
+        double score     = totalDays == 0
+                ? 0
+                : Math.round((workDays / (double) totalDays) * 1000.0) / 10.0;
+
+        return CompletableFuture.completedFuture(
+                new AttendanceStatsDto(workDays, lateDays, absentDays, score));
+    }
     
     
  // 근태 이력 전체 조회 (비동기 처리)
