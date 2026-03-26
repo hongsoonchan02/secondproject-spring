@@ -20,6 +20,8 @@ import kr.co.secondProject.department.dto.ResCurrentDpListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentCreateDTO;
 import kr.co.secondProject.department.dto.ResDepartmentListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentUpdateDTO;
+import kr.co.secondProject.department.dto.ResHeaderDTO;
+import kr.co.secondProject.department.dto.ResShowDTO;
 import kr.co.secondProject.department.dto.ResUpdateMemberListDTO;
 import kr.co.secondProject.department.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +34,18 @@ public class DepartmemtController {
 	private final DepartmentService departmentService;
 	
 	@GetMapping
-	public ResponseEntity<List<ResDepartmentListDTO>> show() {
+	public ResponseEntity<ResShowDTO> show() {
 	
 		List<ResDepartmentListDTO> dpList = departmentService.departmentList();
+		ResHeaderDTO headerResponse = departmentService.header();
+		ResShowDTO show = ResShowDTO.builder()
+				.dpList(dpList)
+				.header(headerResponse)
+				.build();
 		
 		return (dpList != null) ?
-				ResponseEntity.status(HttpStatus.OK).body(dpList) :
+				ResponseEntity.status(HttpStatus.OK).body(show) :
 				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-			
 	}
 	
 	@GetMapping("/search")

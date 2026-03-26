@@ -14,6 +14,7 @@ import kr.co.secondProject.department.dto.ResCurrentDpListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentCreateDTO;
 import kr.co.secondProject.department.dto.ResDepartmentListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentUpdateDTO;
+import kr.co.secondProject.department.dto.ResHeaderDTO;
 import kr.co.secondProject.department.dto.ResUpdateMemberListDTO;
 import kr.co.secondProject.department.entity.Department;
 import kr.co.secondProject.department.repository.DepartmentRepository;
@@ -77,6 +78,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 						.build())
 				.collect(Collectors.toList());
 		
+		return response;
+	}
+	
+	// 부서 관리 메인 헤더
+	public ResHeaderDTO header() {
+		Long dpCount = departmentRepository.count();
+		Long empCount = employeeRepository.count();
+		// 성장률 dpGrowthRate
+		ResHeaderDTO response = ResHeaderDTO.builder()
+				.dpCount(dpCount)
+				.empCount(empCount)
+			//	.dpGrowthRate(dpGrowthRate)
+				.build();
 		return response;
 	}
 	
