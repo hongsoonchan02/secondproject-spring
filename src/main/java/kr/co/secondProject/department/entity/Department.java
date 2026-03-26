@@ -44,4 +44,5 @@ public class Department {
 	    this.dpDetail = dpDetail;
 	    this.dpManager = manager;
 	}
+	
 }

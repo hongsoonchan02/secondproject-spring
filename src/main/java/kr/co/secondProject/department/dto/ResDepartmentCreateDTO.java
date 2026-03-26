@@ -13,16 +13,25 @@ public class ResDepartmentCreateDTO {
 	private String dpDetail;
 	private String dpManagerName;
 	
+//	private ResDepartmentCreateDTO(Department department) {
+//		this.dpCode = department.getDpCode();
+//		this.dpName = department.getDpName();
+//		this.dpDetail = department.getDpDetail();
+//		this.dpManagerName = department.getDpManager().getName();
+//	}
 	
-	public static ResDepartmentCreateDTO toDto (Department department) {
+	
+	public static ResDepartmentCreateDTO from (Department department) {
 		ResDepartmentCreateDTO response = ResDepartmentCreateDTO.builder()
 				.dpCode(department.getDpCode())
 				.dpDetail(department.getDpDetail())
-				.dpName(department.getDpDetail())
+				.dpName(department.getDpName())
 				.dpManagerName(department.getDpManager().getName())
 				.build();
 		return response;
 	}
+
+
 	
 
 }
