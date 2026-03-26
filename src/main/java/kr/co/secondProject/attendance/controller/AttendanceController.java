@@ -30,22 +30,20 @@ public class AttendanceController {
     // URL  : GET /attendance/{employeeId}/stats
     // ────────────────────────────────────────────────────────────────────────
     @GetMapping("/{employeeId}/stats")
-    public CompletableFuture<ResponseEntity<AttendanceStatsDto>> getAttendanceStats(
+    public ResponseEntity<AttendanceStatsDto> getAttendanceStats(
             @PathVariable Long employeeId) {
-
-        return attendanceService.getAttendanceStats(employeeId)
-                .thenApply(ResponseEntity::ok);
+ 
+        return ResponseEntity.ok(attendanceService.getAttendanceStats(employeeId));
     }
     
     
     // [GET] 근태 이력 전체 조회
     // URL  : GET /attendance/{employeeId}
     @GetMapping("/{employeeId}")
-    public CompletableFuture<ResponseEntity<List<ResAttendanceDTO>>> getAttendanceList(
+    public ResponseEntity<List<ResAttendanceDTO>> getAttendanceList(
             @PathVariable Long employeeId) {
-
-        return attendanceService.getAttendanceList(employeeId)
-                .thenApply(ResponseEntity::ok);
+ 
+        return ResponseEntity.ok(attendanceService.getAttendanceList(employeeId));
     }
 
     
@@ -53,22 +51,20 @@ public class AttendanceController {
     // URL  : POST /attendance/check-in
     // Body : { employeeId, date, startTime, state }
     @PostMapping("/check-in")
-    public CompletableFuture<ResponseEntity<ResAttendanceDTO>> checkIn(
+    public ResponseEntity<ResAttendanceDTO> checkIn(
             @RequestBody ReqAttendanceDTO reqDto) {
-
-        return attendanceService.checkIn(reqDto)
-                .thenApply(ResponseEntity::ok);
+ 
+        return ResponseEntity.ok(attendanceService.checkIn(reqDto));
     }
 
     // [POST] 퇴근 등록
     // URL  : POST /attendance/check-out/{attendanceId}
     // Body : { endTime }
     @PostMapping("/check-out/{attendanceId}")
-    public CompletableFuture<ResponseEntity<ResAttendanceDTO>> checkOut(
+    public ResponseEntity<ResAttendanceDTO> checkOut(
             @PathVariable Long attendanceId,
             @RequestBody ReqAttendanceDTO reqDto) {
-
-        return attendanceService.checkOut(attendanceId, reqDto)
-                .thenApply(ResponseEntity::ok);
+ 
+        return ResponseEntity.ok(attendanceService.checkOut(attendanceId, reqDto));
     }
 }

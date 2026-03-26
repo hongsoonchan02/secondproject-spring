@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class ReqAttendanceDTO {
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="board_id")
+	@JoinColumn(name="id")
     private Long employeeId;        // 직원 ID
 
     private LocalDateTime date;     // 날짜

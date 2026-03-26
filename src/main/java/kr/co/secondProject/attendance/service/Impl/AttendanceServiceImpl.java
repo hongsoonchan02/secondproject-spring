@@ -4,10 +4,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import kr.co.secondProject.attendance.dto.AttendanceStatsDto;
@@ -34,9 +32,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     //  - 지각 횟수 : state = "지각"
     //  - 결근 일수 : state = "결근"
     //  - 근태 점수 : (출근 일수 / 이번 달 총 일수) × 100
-    @Async
     @Override
-    public CompletableFuture<AttendanceStatsDto> getAttendanceStats(Long employeeId) {
+    public AttendanceStatsDto getAttendanceStats(Long employeeId) {
 
         LocalDateTime startOfMonth = YearMonth.now().atDay(1).atStartOfDay();
         LocalDateTime endOfMonth   = YearMonth.now().atEndOfMonth().atTime(23, 59, 59);
@@ -61,30 +58,27 @@ public class AttendanceServiceImpl implements AttendanceService {
                 ? 0
                 : Math.round((workDays / (double) totalDays) * 1000.0) / 10.0;
 
-        return CompletableFuture.completedFuture(
-                new AttendanceStatsDto(workDays, lateDays, absentDays, score));
+        return new AttendanceStatsDto(workDays, lateDays, absentDays, score);
     }
     
     
  // 근태 이력 전체 조회 (비동기 처리)
-    @Async
     @Override
-    public CompletableFuture<List<ResAttendanceDTO>> getAttendanceList(Long employeeId) {
+    public List<ResAttendanceDTO> getAttendanceList(Long employeeId) {
         List<Attendance> list = attendanceRepository.findByEmployee_IdOrderByDateDesc(employeeId);
  
         List<ResAttendanceDTO> result = list.stream()
 							                .map(this::toResDto)
 							                .collect(Collectors.toList());
  
-        return CompletableFuture.completedFuture(result);
+        return result;
     }
 
     
     
-    // 출근 등록 (비동기 처리)
-    @Async
+    // 출근 등록
     @Override
-    public CompletableFuture<ResAttendanceDTO> checkIn(ReqAttendanceDTO reqDto) {
+    public ResAttendanceDTO checkIn(ReqAttendanceDTO reqDto) {
  
         Employee employee = employeeRepository.findById(reqDto.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -97,16 +91,15 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.setState("출근중");  // 퇴근 전 임시 상태
  
         Attendance saved = attendanceRepository.save(attendance);
-        return CompletableFuture.completedFuture(toResDto(saved));
+        return toResDto(saved);
     }
     
     
-    // 퇴근 등록 (비동기 처리)
+    // 퇴근 등록
     //  - 퇴근 시간 저장 후 근무시간 및 근태 상태 자동 계산
     //  - 지각 기준: 출근 시각 09:00 초과 → "지각", 이하 → "정상"
-    @Async
     @Override
-    public CompletableFuture<ResAttendanceDTO> checkOut(Long attendanceId, ReqAttendanceDTO reqDto) {
+    public ResAttendanceDTO checkOut(Long attendanceId, ReqAttendanceDTO reqDto) {
  
         Attendance attendance = attendanceRepository.findById(attendanceId)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -130,7 +123,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
  
         Attendance saved = attendanceRepository.save(attendance);
-        return CompletableFuture.completedFuture(toResDto(saved));
+        return toResDto(saved);
     }
  
     // Entity → ResAttendanceDTO 변환

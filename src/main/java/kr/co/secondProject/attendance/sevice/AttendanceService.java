@@ -16,24 +16,24 @@ public interface AttendanceService {
      * 특정 직원의 이번 달 근태 통계 조회 (비동기)
      * @param employeeId 직원 ID
      */
-    CompletableFuture<AttendanceStatsDto> getAttendanceStats(Long employeeId);
+    AttendanceStatsDto getAttendanceStats(Long employeeId);
 	
     /**
      * 특정 직원의 근태 이력 전체 조회 (비동기)
      * @param employeeId 직원 ID
      */
-    CompletableFuture<List<ResAttendanceDTO>> getAttendanceList(Long employeeId);
+    List<ResAttendanceDTO> getAttendanceList(Long employeeId);
 	
     /**
      * 출근 등록 (비동기)
      * @param reqDto 출근 정보
      */
-    CompletableFuture<ResAttendanceDTO> checkIn(ReqAttendanceDTO reqDto);
+    ResAttendanceDTO checkIn(ReqAttendanceDTO reqDto);
 
     /**
      * 퇴근 등록 (비동기)
      * @param attendanceId 근태 ID
      * @param reqDto       퇴근 정보
      */
-    CompletableFuture<ResAttendanceDTO> checkOut(Long attendanceId, ReqAttendanceDTO reqDto);
+    ResAttendanceDTO checkOut(Long attendanceId, ReqAttendanceDTO reqDto);
 }
