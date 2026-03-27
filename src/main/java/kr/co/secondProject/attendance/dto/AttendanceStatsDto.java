@@ -1,7 +1,7 @@
 package kr.co.secondProject.attendance.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
@@ -12,16 +12,20 @@ import lombok.NoArgsConstructor;
  * - 총 결근 일수
  * - 근태 점수
  */
-@Data
+@Schema(description = "근태 통계 카드 DTO")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceStatsDto {
 
-    private int workDays;           // 이번 달 출근 일수
+    @Schema(description = "이번 달 출근 일수", example = "20")
+    private int workDays;
 
-    private int lateDays;           // 지각 횟수
+    @Schema(description = "지각 횟수", example = "3")
+    private int lateDays;
 
-    private int absentDays;         // 총 결근 일수
+    @Schema(description = "총 결근 일수", example = "1")
+    private int absentDays;
 
-    private double attendanceScore; // 근태 점수 (%)
+    @Schema(description = "근태 점수 (%)", example = "92.5", minimum = "0", maximum = "100")
+    private double attendanceScore;
 }
