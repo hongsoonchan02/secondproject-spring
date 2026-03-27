@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResAttendanceDTO {
 
+	@JoinColumn(name="attendance_id")
     private Long attendanceId;      // 근태 코드
 
     @ManyToOne(fetch=FetchType.LAZY)

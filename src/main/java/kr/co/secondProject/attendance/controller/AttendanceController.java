@@ -2,10 +2,10 @@ package kr.co.secondProject.attendance.controller;
 
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,23 +48,23 @@ public class AttendanceController {
 
     
     // [POST] 출근 등록
-    // URL  : POST /attendance/check-in
+    // URL  : POST /attendance
     // Body : { employeeId, date, startTime, state }
-    @PostMapping("/check-in")
-    public ResponseEntity<ResAttendanceDTO> checkIn(
+    @PostMapping("/")
+    public ResponseEntity<ResAttendanceDTO> AttendanceIn(
             @RequestBody ReqAttendanceDTO reqDto) {
  
-        return ResponseEntity.ok(attendanceService.checkIn(reqDto));
+        return ResponseEntity.ok(attendanceService.AttendanceIn(reqDto));
     }
 
     // [POST] 퇴근 등록
-    // URL  : POST /attendance/check-out/{attendanceId}
+    // URL  : PATCH /attendance/{attendanceId}
     // Body : { endTime }
-    @PostMapping("/check-out/{attendanceId}")
-    public ResponseEntity<ResAttendanceDTO> checkOut(
+    @PatchMapping("/{attendanceId}")
+    public ResponseEntity<ResAttendanceDTO> AttendanceOut(
             @PathVariable Long attendanceId,
             @RequestBody ReqAttendanceDTO reqDto) {
  
-        return ResponseEntity.ok(attendanceService.checkOut(attendanceId, reqDto));
+        return ResponseEntity.ok(attendanceService.AttendanceOut(attendanceId, reqDto));
     }
 }

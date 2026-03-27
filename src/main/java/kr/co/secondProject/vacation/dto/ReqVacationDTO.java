@@ -2,9 +2,8 @@ package kr.co.secondProject.vacation.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import kr.co.secondProject.vacation.entity.Vacation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,14 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResVacationDTO {
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id")
-    private Long employeeId;        // 직원 ID
+public class ReqVacationDTO {
 	
 	@JoinColumn(name="annual_code")
 	private String annualCode;		// 연차 코드
+	
+	@JoinColumn(name="vacation_code")
+	private Long vacationCode;		// 휴가 코드
 	
 	private LocalDateTime startTime;// 휴가 시작일
 	
@@ -30,8 +28,4 @@ public class ResVacationDTO {
 	private boolean approval;		// 승인 상태
 	
 	private String kind;			// 휴가 종류
-	
-	private int joinYears;			// 입사 연수
-	
-	private int annualNum;			// 연처 갯수
 }

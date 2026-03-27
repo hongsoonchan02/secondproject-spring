@@ -28,12 +28,12 @@ public interface AttendanceService {
      * 출근 등록 (비동기)
      * @param reqDto 출근 정보
      */
-    ResAttendanceDTO checkIn(ReqAttendanceDTO reqDto);
+    ResAttendanceDTO AttendanceIn(ReqAttendanceDTO reqDto);
 
     /**
      * 퇴근 등록 (비동기)
      * @param attendanceId 근태 ID
      * @param reqDto       퇴근 정보
      */
-    ResAttendanceDTO checkOut(Long attendanceId, ReqAttendanceDTO reqDto);
+    ResAttendanceDTO AttendanceOut(Long attendanceId, ReqAttendanceDTO reqDto);
 }

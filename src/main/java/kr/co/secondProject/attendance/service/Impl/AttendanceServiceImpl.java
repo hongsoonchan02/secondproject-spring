@@ -62,7 +62,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
     
     
- // 근태 이력 전체 조회 (비동기 처리)
+    // 근태 이력 전체 조회 (비동기 처리)
     @Override
     public List<ResAttendanceDTO> getAttendanceList(Long employeeId) {
         List<Attendance> list = attendanceRepository.findByEmployee_IdOrderByDateDesc(employeeId);
@@ -78,7 +78,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     
     // 출근 등록
     @Override
-    public ResAttendanceDTO checkIn(ReqAttendanceDTO reqDto) {
+    public ResAttendanceDTO AttendanceIn(ReqAttendanceDTO reqDto) {
  
         Employee employee = employeeRepository.findById(reqDto.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -99,7 +99,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     //  - 퇴근 시간 저장 후 근무시간 및 근태 상태 자동 계산
     //  - 지각 기준: 출근 시각 09:00 초과 → "지각", 이하 → "정상"
     @Override
-    public ResAttendanceDTO checkOut(Long attendanceId, ReqAttendanceDTO reqDto) {
+    public ResAttendanceDTO AttendanceOut(Long attendanceId, ReqAttendanceDTO reqDto) {
  
         Attendance attendance = attendanceRepository.findById(attendanceId)
                 .orElseThrow(() -> new IllegalArgumentException(
