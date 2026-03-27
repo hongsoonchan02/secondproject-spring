@@ -95,7 +95,7 @@ public class DashboardService {
         //1. 중복 출근 방지 코드
         attendanceRepository.findByEmployee_IdAndDate(employeeId,todayStart)
                 .ifPresent( a-> {
-                    throw new RuntimeException("이미 출근 처리 되었습니다.")
+                    throw new RuntimeException("이미 출근 처리 되었습니다.");
                 });
 
         Employee employee = employeeRepository.findById(employeeId)
