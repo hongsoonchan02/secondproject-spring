@@ -14,51 +14,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.secondProject.department.dto.ReqDepartmentCreateDTO;
 import kr.co.secondProject.department.dto.ReqDepartmentUpdateDTO;
 import kr.co.secondProject.department.dto.ResCurrentDpListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentCreateDTO;
 import kr.co.secondProject.department.dto.ResDepartmentListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentUpdateDTO;
-import kr.co.secondProject.department.dto.ResHeaderDTO;
-import kr.co.secondProject.department.dto.ResShowDTO;
 import kr.co.secondProject.department.dto.ResUpdateMemberListDTO;
 import kr.co.secondProject.department.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Department Api", description = "부서 관리 기능")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/department")
-public class DepartmemtController {
+public class DepartmentController {
 	
 	private final DepartmentService departmentService;
 	
+	@Operation(summary = "메인 화면", description = "헤더, 부서 리스트 조회 및 검색")
 	@GetMapping
-	public ResponseEntity<ResShowDTO> show() {
+	public ResponseEntity<List<ResDepartmentListDTO>> show(@RequestParam String keyword) {
 	
-		List<ResDepartmentListDTO> dpList = departmentService.departmentList();
-		ResHeaderDTO headerResponse = departmentService.header();
-		ResShowDTO show = ResShowDTO.builder()
-				.dpList(dpList)
-				.header(headerResponse)
-				.build();
+		List<ResDepartmentListDTO> dpConstruct = departmentService.departmentList(keyword);
 		
-		return (dpList != null) ?
-				ResponseEntity.status(HttpStatus.OK).body(show) :
+		
+		return (dpConstruct != null) ?
+				ResponseEntity.status(HttpStatus.OK).body(dpConstruct) :
 				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
-	
-	@GetMapping("/search")
-	public ResponseEntity<List<ResDepartmentListDTO>> search(@RequestParam String keyword) {
-		
-		List<ResDepartmentListDTO> searchList = departmentService.departmentSerch(keyword);
-		
-		return (searchList != null) ?
-				ResponseEntity.status(HttpStatus.OK).body(searchList) :
-				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-	}
-	
-	@PostMapping("/create")
+
+	@Operation(summary = "부서 생성", description = "정보 입력후 생성")
+	@PostMapping
 	public ResponseEntity<ResDepartmentCreateDTO> create(@RequestBody ReqDepartmentCreateDTO dto) {
 		ResDepartmentCreateDTO response = departmentService.departmentCreate(dto);
 		
@@ -67,15 +56,17 @@ public class DepartmemtController {
 				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 	
-	@GetMapping("/create")
+	@Operation(summary = "최근 생성 부서 리스트", description = "부서 생성탭 최근 생성 부서 리스트")
+	@GetMapping("/recent")
 	public ResponseEntity<List<ResCurrentDpListDTO>> currentCreateDpList() {
-		List<ResCurrentDpListDTO> responseList = departmentService.currnetDpList();
-		
+		List<ResCurrentDpListDTO> responseList = departmentService.currentDpList();
+
 		// 실패랄게 없다 데이터가 없으면 그냥 빈 문자열 [] 반환
 		return ResponseEntity.status(HttpStatus.OK).body(responseList);
 	}
 	
-	@GetMapping("/update/{id}")
+	@Operation(summary = "부서 수정탭 부서원 리스트", description = "부서 id로 부서원 리스트 조회")
+	@GetMapping("/members/{id}")
 	public ResponseEntity<List<ResUpdateMemberListDTO>> dpMemberList(@PathVariable Long id) {
 		
 		List<ResUpdateMemberListDTO> responseList = departmentService.updateList(id);
@@ -85,7 +76,8 @@ public class DepartmemtController {
 				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 	
-	@PatchMapping("/update/{id}")
+	@Operation(summary = "부서 수정", description = "부서 id로 조회 후 수정")
+	@PatchMapping("/{id}")
 	public ResponseEntity<ResDepartmentUpdateDTO> update(@PathVariable Long id, @RequestBody ReqDepartmentUpdateDTO dto) {
 		ResDepartmentUpdateDTO response = departmentService.departmentUpdate(id, dto);
 		
@@ -94,6 +86,7 @@ public class DepartmemtController {
 				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 	
+	@Operation(summary = "부서 삭제", description = "부서 id에 맞는 부서 삭제")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> delete(@PathVariable Long id) {
 		departmentService.departmentDelete(id);

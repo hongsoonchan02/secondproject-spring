@@ -1,5 +1,6 @@
 package kr.co.secondProject.department.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.secondProject.department.entity.Department;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,17 +9,17 @@ import lombok.Getter;
 @Builder
 public class ResDepartmentCreateDTO {
 	
+	@Schema(description = "부서 코드", example = "EXP-564")
 	private String dpCode;
-	private String dpName;
-	private String dpDetail;
-	private String dpManagerName;
 	
-//	private ResDepartmentCreateDTO(Department department) {
-//		this.dpCode = department.getDpCode();
-//		this.dpName = department.getDpName();
-//		this.dpDetail = department.getDpDetail();
-//		this.dpManagerName = department.getDpManager().getName();
-//	}
+	@Schema(description = "부서명", example = "성장 및 전략")
+	private String dpName;
+	
+	@Schema(description = "부서 설명", example = "수익 운영")
+	private String dpDetail;
+	
+	@Schema(description = "부서 관리자 이름", example = "엘레나 룬드")
+	private String dpManagerName;
 	
 	
 	public static ResDepartmentCreateDTO from (Department department) {
