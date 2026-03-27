@@ -78,5 +78,5 @@
 |------|------|------|
 | 홍순찬 ([hongsoonchan02](https://github.com/hongsoonchan02)) | 팀장 | CICD 파이프라인 구축, 대시보드 기능 구현(예시) |
 | 고은별 ([KoreaNirsa](https://github.com/채워주세요)) | 팀원 | 채울 예정 |
-| 이소정 ([KoreaNirsa](https://github.com/채워주세요)) | 팀원 | 채울 예정 |
+| 이소정 ([BeanCan0235](https://github.com/BeanCan0235)) | 팀원 | AWS EC2(WAS) 구축, 로그인 & 비밀번호 찾기 & 대시보드 기능 구현 |
 | 임수현 ([soo97](https://github.com/soo97)) | 팀원 | S3 + CloudFront 구축, 근태 관리 & 휴가 관리 기능 구현 |
