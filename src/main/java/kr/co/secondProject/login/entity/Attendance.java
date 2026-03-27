@@ -2,16 +2,15 @@ package kr.co.secondProject.login.entity;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@Builder
 @Table(name = "attendance")
-@AllArgsConstructor
 public class Attendance {
 
     @Id
@@ -31,16 +30,6 @@ public class Attendance {
     private String allTime;         // 근무시간
 
     private String state;           // 근태상태
-
-
-    //퇴근처리 메서드
-    //this -> 지금 이 객체 자신을 가리킴
-    // 퇴근시각, 근무시간, 상태를 업그레이드
-    public void checkOut(LocalDateTime endTime, String allTime, String state){
-        this.endTime = endTime;
-        this.allTime = allTime;
-        this.state = state;
-    }
 
 
 }
