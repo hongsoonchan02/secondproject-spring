@@ -4,13 +4,17 @@ import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 근태 이력 조회 응답 DTO
  * 날짜 / 출근시각 / 퇴근시각 / 근무시간 / 상태
  */
 @Schema(description = "근태 이력 조회 응답 DTO")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResAttendanceDTO {
@@ -42,4 +46,5 @@ public class ResAttendanceDTO {
         allowableValues = {"정상", "지각", "휴가", "조퇴", "연장 근무"}
     )
     private String state;
+    
 }
