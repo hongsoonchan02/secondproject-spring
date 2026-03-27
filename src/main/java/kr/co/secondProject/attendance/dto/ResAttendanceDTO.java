@@ -2,38 +2,44 @@ package kr.co.secondProject.attendance.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * 근태 이력 조회 응답 DTO
  * 날짜 / 출근시각 / 퇴근시각 / 근무시간 / 상태
  */
-@Data
+@Schema(description = "근태 이력 조회 응답 DTO")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResAttendanceDTO {
 
-	@JoinColumn(name="attendance_id")
-    private Long attendanceId;      // 근태 코드
+    @Schema(description = "근태 코드", example = "1001")
+    private Long attendanceId;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id")
-    private Long employeeId;        // 직원 ID
+    @Schema(description = "직원 ID", example = "1")
+    private Long employeeId;
 
-    private String employeeName;    // 직원 이름 (표시용)
+    @Schema(description = "직원 이름", example = "홍길동")
+    private String employeeName;
 
-    private LocalDateTime date;     // 날짜
+    @Schema(description = "근태 날짜", example = "2026년 03월 27일 금요일")
+    private LocalDateTime date;
 
-    private LocalDateTime startTime;// 출근 시각
+    @Schema(description = "출근 시간", example = "T09:00 AM")
+    private LocalDateTime startTime;
 
-    private LocalDateTime endTime;  // 퇴근 시각
+    @Schema(description = "퇴근 시간", example = "T18:00 PM")
+    private LocalDateTime endTime;
 
-    private String allTime;         // 근무 시간 (예: "9시간 18분")
+    @Schema(description = "근무 시간", example = "9시간 0분")
+    private String allTime;
 
-    private String state;           // 근태 상태 (정상 / 지각 / 결근)
+    @Schema(
+        description = "근태 상태",
+        example = "정상",
+        allowableValues = {"정상", "지각", "휴가", "조퇴", "연장 근무"}
+    )
+    private String state;
 }
