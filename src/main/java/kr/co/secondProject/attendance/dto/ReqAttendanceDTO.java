@@ -1,31 +1,38 @@
 package kr.co.secondProject.attendance.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
-
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 출근/퇴근 등록 및 수정 요청 DTO
  */
-@Data
+@Schema(description = "출근/퇴근 등록 및 수정 요청 DTO")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class ReqAttendanceDTO {
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id")
-    private Long employeeId;        // 직원 ID
+    @Schema(description = "직원 ID", example = "1")
+    private Long employeeId;
 
-    private LocalDateTime date;     // 날짜
+    @Schema(description = "근태 날짜", example = "2026년 03월 27일 금요일")
+    private LocalDateTime date;
 
-    private LocalDateTime startTime;// 출근 시간
+    @Schema(description = "출근 시간", example = "T09:00 AM")
+    private LocalDateTime startTime;
 
-    private LocalDateTime endTime;  // 퇴근 시간
+    @Schema(description = "퇴근 시간", example = "T18:00 PM")
+    private LocalDateTime endTime;
 
-    private String state;           // 근태 상태 (정상, 지각, 결근 등)
+    @Schema(
+        description = "근태 상태",
+        example = "정상",
+        allowableValues = {"정상", "지각", "휴가", "조퇴", "연장 근무"}
+    )
+    private String state;
 }
