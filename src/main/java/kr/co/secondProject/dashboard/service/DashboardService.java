@@ -1,6 +1,7 @@
 package kr.co.secondProject.dashboard.service;
 
 
+import jakarta.transaction.Transactional;
 import kr.co.secondProject.dashboard.dto.AttendanceRecordDTO;
 import kr.co.secondProject.dashboard.dto.CheckInResDTO;
 import kr.co.secondProject.dashboard.dto.DashboardResDTO;
@@ -11,6 +12,7 @@ import kr.co.secondProject.login.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
@@ -25,6 +27,7 @@ public class DashboardService {
     private final AttendanceRepository attendanceRepository;
 
     //======== 대시보드 전체 정보 조회 ==========
+    @Transactional
     public DashboardResDTO getDashboardInfo(Long employeeId) {
 
             //직원 정보 조회
@@ -87,6 +90,7 @@ public class DashboardService {
     }
 
     // ==== 출근 처리 ====
+    @Transactional
     public CheckInResDTO checkIn(Long employeeId) {
 
         LocalDateTime now = LocalDateTime.now();
@@ -95,7 +99,7 @@ public class DashboardService {
         //1. 중복 출근 방지 코드
         attendanceRepository.findByEmployee_IdAndDate(employeeId,todayStart)
                 .ifPresent( a-> {
-                    throw new RuntimeException("이미 출근 처리 되었습니다.")
+                    throw new RuntimeException("이미 출근 처리 되었습니다.");
                 });
 
         Employee employee = employeeRepository.findById(employeeId)
@@ -121,6 +125,7 @@ public class DashboardService {
                 .build();
     }
     // ===== 퇴근 처리 =====
+    @Transactional
     public void checkOut(Long employeeId) {
 
         LocalDateTime todayStart = LocalDateTime.now()
