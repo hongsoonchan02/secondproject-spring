@@ -2,6 +2,7 @@ package kr.co.secondProject.dashboard.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.secondProject.login.entity.Attendance;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +32,15 @@ public class AttendanceRecordDTO {
 
     @Schema(description = "근태상태", example = "정상")
     private String state;
+
+    public static AttendanceRecordDTO from(Attendance a){
+        return AttendanceRecordDTO.builder()
+                .date(a.getDate())
+                .startTime(a.getStartTime())
+                .endTime(a.getEndTime())
+                .allTime(a.getAllTime())
+                .state(a.getState())
+                .build();
+
+    }
 }
