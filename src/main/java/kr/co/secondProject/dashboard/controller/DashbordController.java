@@ -31,4 +31,13 @@ public class DashbordController {
         dashboardService.checkOut(employeeId);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{employeeId}/checkout")
+    @Operation(summary = "퇴근처리", description = "퇴근 버튼 클릭 시 퇴근 시각 및 근무시간 기록")
+    public ResponseEntity<Void> checkOut(@PathVariable Long employeeId) {
+        dashboardService.checkOut(employeeId);
+        return ResponseEntity.ok().build();
+    }
+
+
 }
