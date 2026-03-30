@@ -19,7 +19,7 @@ public class Employee {
 
     private String profilePhoto;    //프로필사진 URL
 
-    private Long empId;     //사번
+    private String empId;     //사번
 
     private String name;    //이름
 
