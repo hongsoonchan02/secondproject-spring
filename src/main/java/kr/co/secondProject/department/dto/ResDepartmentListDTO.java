@@ -1,5 +1,6 @@
 package kr.co.secondProject.department.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.secondProject.login.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,11 +13,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResDepartmentListDTO {
 
-	private String dpCode; // 부서 코드
-	private String dpName; // 부서 이름
-	private String dpDetail; // 부서 설명
-	private Employee dpManager; // 부서 관리자
-	private String dpManagerDetail; // 부서 관리자 설명
-	private int dpmember; // 부서 인원
+	@Schema(description = "부서 코드", example = "EXP-564")
+	private String dpCode; 
 	
+	@Schema(description = "부서명", example = "시스템 엔지니어링")
+	private String dpName;
+
+	@Schema(description = "부서 관리자 성명", example = "아드리안 머서")
+	private String dpManagerName; 
+	
+	@Schema(description = "부서원 수", example = "154")
+	private int dpMember; 
+	
+	@Schema(description = "평균 근속", example = "5.7")
+	private float averegeYear;
 }
