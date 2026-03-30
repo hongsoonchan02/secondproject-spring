@@ -25,7 +25,7 @@ public class DashboardService {
     private final EmployeeRepository employeeRepository;
     private final AttendanceRepository attendanceRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public DashboardResDTO getDashboardInfo(Long employeeId) {
 
             Employee employee = employeeRepository.findById(employeeId)
