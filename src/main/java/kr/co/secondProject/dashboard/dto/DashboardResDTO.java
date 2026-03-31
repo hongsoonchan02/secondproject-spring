@@ -1,12 +1,14 @@
 package kr.co.secondProject.dashboard.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.secondProject.login.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Getter
 @Builder
@@ -35,4 +37,22 @@ public class DashboardResDTO {
 
     @Schema(description = "출근 기록 목록")
     private List<AttendanceRecordDTO> attendanceList;
+
+    public static DashboardResDTO of(
+            Employee employee,
+            boolean checkedInToday,
+            LocalDateTime todayStartTime,
+            int monthlyWorkDays,
+            List<AttendanceRecordDTO> attendanceList
+    ) {
+        return DashboardResDTO.builder()
+                .name(employee.getName())
+                .position(employee.getPosition())
+                .role(employee.getRole())
+                .checkedInToday(checkedInToday)
+                .todayStartTime(todayStartTime)
+                .monthlyWorkDays(monthlyWorkDays)
+                .attendanceList(attendanceList)
+                .build();
+    }
 }
