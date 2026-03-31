@@ -3,41 +3,56 @@ package kr.co.secondProject.vacation.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.Id;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "vacation")
 public class Vacation {
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id")
+	
+//	@JoinColumn(name="id")
     private Long employeeId;        // 직원 ID
 	
-	@JoinColumn(name="annual_code")
+//	@JoinColumn(name="id")
+	private String proxyEmpId;		// 대리 신청자 ID
+	
+//	@JoinColumn(name="annual_code")
 	private String annualCode;		// 연차 코드
+	
+//	@JoinColumn(name="dp_num")
+	private String dpNum;
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@JoinColumn(name="Vacation_code")
+	private Long vacationCode;		// 휴가 코드
 	
 	private LocalDateTime startTime;// 휴가 시작일
 	
 	private LocalDateTime endTime;	// 휴가 끝일
 	
-	private int remaining;			// 잔여 휴가
+	private Integer remaining;			// 잔여 휴가
 	
-	private boolean approval;		// 승인 상태
+	private Boolean approval;		// 승인 상태
 	
-	private String kind;			// 휴가 종류
+	private String approvalLabel;   // 승인 상태 라벨
+	
+	private String kind;			// 휴가 사유(교육,병가, 경조사, 기타)
+	
+	private String reason;			// 기타 사유
 	
 	private int joinYears;			// 입사 연수
 	
 	private int annualNum;			// 연처 갯수
+
 	
 }

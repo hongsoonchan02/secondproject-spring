@@ -1,11 +1,14 @@
 package kr.co.secondProject.vacation.repository;
 
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import kr.co.secondProject.vacation.entity.Vacation;
 
-public class VacationRepository {
+public interface VacationRepository extends JpaRepository<Vacation, Long>{
 	
-	// 특정 직원의 휴가 신청 내역 조회
-	List<Vacation> list = vacationrepository.finByEmployee_IdOrderByDateDesc(Long employeeId);
+	// 로그인 직원의 휴가 신청 내역 조회
+	Page<Vacation> findByEmployeeIdOrderByStartTimeDesc(Long employeeId, Pageable pageable);
 }

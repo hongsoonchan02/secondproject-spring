@@ -1,7 +1,6 @@
 package kr.co.secondProject.attendance.sevice;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import kr.co.secondProject.attendance.dto.AttendanceStatsDto;
 import kr.co.secondProject.attendance.dto.ReqAttendanceDTO;

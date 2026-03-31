@@ -128,9 +128,15 @@ public class AttendanceServiceImpl implements AttendanceService {
         return toResDto(saved);
     }
 
-
+    /*
+     * ResDTO로 이동 및 호출하여 사용
+     * */
     // Entity → ResAttendanceDTO 변환
     private ResAttendanceDTO toResDto(Attendance attendance) {
+    	
+    	/*
+    	 * Setter말고 build 사용 권장
+    	 * */
         ResAttendanceDTO dto = new ResAttendanceDTO();
         dto.setAttendanceId(attendance.getAttendanceId());
         dto.setDate(attendance.getDate());
