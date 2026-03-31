@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)  // 클래스 전체 기본값: 조회 전용
+@Transactional(readOnly = true)
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
@@ -35,6 +35,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     //  - 결근 일수 : state = "결근"
     //  - 근태 점수 : (출근 일수 / 이번 달 총 일수) × 100
     @Override
+    @Transactional(readOnly = true)
     public AttendanceStatsDto getAttendanceStats(Long employeeId) {
 
         LocalDateTime startOfMonth = YearMonth.now().atDay(1).atStartOfDay();
@@ -66,6 +67,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     // 근태 이력 전체 조회
     @Override
+    @Transactional(readOnly = true)
     public List<ResAttendanceDTO> getAttendanceList(Long employeeId) {
 
         return attendanceRepository
