@@ -38,6 +38,9 @@ dependencies {
 
 	//DB때문에 임시로 H2사용. DB서버 만들어지면 지울예정
 	runtimeOnly 'com.h2database:h2'
+
+	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
 }
 
 tasks.named('test') {
