@@ -73,7 +73,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceRepository
                 .findByEmployee_IdOrderByDateDesc(employeeId)
                 .stream()
-                .map(this::toResDto)
+                .map(ResAttendanceDTO::from)
                 .collect(Collectors.toList());
     }
 
@@ -94,7 +94,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.setState("출근중");  // 퇴근 전 임시 상태
 
         Attendance saved = attendanceRepository.save(attendance);
-        return toResDto(saved);
+        return ResAttendanceDTO.from(saved);
     }
 
 
@@ -127,24 +127,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
 
         Attendance saved = attendanceRepository.save(attendance);
-        return toResDto(saved);
+        return ResAttendanceDTO.from(saved);
     }
 
 
-    // Entity → ResAttendanceDTO 변환
-    private ResAttendanceDTO toResDto(Attendance attendance) {
-        ResAttendanceDTO dto = new ResAttendanceDTO();
-        dto.setAttendanceId(attendance.getAttendanceId());
-        dto.setDate(attendance.getDate());
-        dto.setStartTime(attendance.getStartTime());
-        dto.setEndTime(attendance.getEndTime());
-        dto.setAllTime(attendance.getAllTime());
-        dto.setState(attendance.getState());
 
-        if (attendance.getEmployee() != null) {
-            dto.setEmployeeId(attendance.getEmployee().getId());
-            dto.setEmployeeName(attendance.getEmployee().getName());
-        }
-        return dto;
-    }
 }

@@ -3,10 +3,9 @@ package kr.co.secondProject.attendance.dto;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import kr.co.secondProject.login.entity.Attendance;
+import lombok.*;
+
 
 /**
  * 근태 이력 조회 응답 DTO
@@ -14,9 +13,9 @@ import lombok.Setter;
  */
 @Schema(description = "근태 이력 조회 응답 DTO")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ResAttendanceDTO {
 
     @Schema(description = "근태 코드", example = "1001")
@@ -47,4 +46,20 @@ public class ResAttendanceDTO {
     )
     private String state;
     
+    
+    // Entity → ResAttendanceDTO 변환
+    public static ResAttendanceDTO from(Attendance attendance) {
+        return ResAttendanceDTO.builder()
+        					   .attendanceId(attendance.getAttendanceId())
+        					   .date(attendance.getDate())
+        					   .startTime(attendance.getStartTime())
+        					   .endTime(attendance.getEndTime())
+        					   .allTime(attendance.getAllTime())
+        					   .state(attendance.getState())
+        					   .employeeId(attendance.getEmployee() != null 
+                               		? attendance.getEmployee().getId() : null)
+        					   .employeeName(attendance.getEmployee() != null 
+                               		? attendance.getEmployee().getName() : null)
+        					   .build();
+    }
 }
