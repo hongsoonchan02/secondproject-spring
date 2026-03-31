@@ -55,7 +55,7 @@ public class DashboardService {
 
         //전체 출근 기록 목록 변환
         List<AttendanceRecordDTO> attendanceList = attendanceRepository
-                .findByEmployee_IdOrderByDateDesc(employeeId)
+                .findByEmployee_IdAndDateBetween(employeeId,start,end)
                 .stream()
                 .map(AttendanceRecordDTO::from)
                 .toList();
