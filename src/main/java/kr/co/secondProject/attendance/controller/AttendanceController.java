@@ -71,10 +71,10 @@ public class AttendanceController {
     // Body : { employeeId, date, startTime, state }
     @Operation(summary = "출근시간 등록")
     @PostMapping("/")
-    public ResponseEntity<ResAttendanceDTO> AttendanceIn(
+    public ResponseEntity<ResAttendanceDTO> attendanceIn(
             @RequestBody ReqAttendanceDTO reqDto) {
  
-        return ResponseEntity.ok(attendanceService.AttendanceIn(reqDto));
+        return ResponseEntity.ok(attendanceService.attendanceIn(reqDto));
     }
 
     // [PATCH] 퇴근 등록
@@ -82,10 +82,10 @@ public class AttendanceController {
     // Body : { endTime }
     @Operation(summary = "퇴근시간 등록")
     @PatchMapping("/{attendanceId}")
-    public ResponseEntity<ResAttendanceDTO> AttendanceOut(
+    public ResponseEntity<ResAttendanceDTO> attendanceOut(
             @PathVariable Long attendanceId,
             @RequestBody ReqAttendanceDTO reqDto) {
  
-        return ResponseEntity.ok(attendanceService.AttendanceOut(attendanceId, reqDto));
+        return ResponseEntity.ok(attendanceService.attendanceOut(attendanceId, reqDto));
     }
 }

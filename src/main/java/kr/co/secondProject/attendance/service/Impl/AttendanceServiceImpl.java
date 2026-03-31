@@ -81,7 +81,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     // 출근 등록
     @Override
     @Transactional  // readOnly = false (쓰기 작업 override)
-    public ResAttendanceDTO AttendanceIn(ReqAttendanceDTO reqDto) {
+    public ResAttendanceDTO attendanceIn(ReqAttendanceDTO reqDto) {
 
         Employee employee = employeeRepository.findById(reqDto.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -103,7 +103,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     //  - 지각 기준: 출근 시각 09:00 초과 → "지각", 이하 → "정상"
     @Override
     @Transactional  // readOnly = false (쓰기 작업 override)
-    public ResAttendanceDTO AttendanceOut(Long attendanceId, ReqAttendanceDTO reqDto) {
+    public ResAttendanceDTO attendanceOut(Long attendanceId, ReqAttendanceDTO reqDto) {
 
         Attendance attendance = attendanceRepository.findById(attendanceId)
                 .orElseThrow(() -> new IllegalArgumentException(
