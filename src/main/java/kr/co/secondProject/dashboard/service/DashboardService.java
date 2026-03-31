@@ -121,13 +121,10 @@ public class DashboardService {
         LocalDateTime now = LocalDateTime.now();
 
         Duration duration = Duration.between(attendance.getStartTime(), now);
-        long hours = duration.toHours();
-        long minutes = duration.toMinutesPart();
-        String allTime = hours +"시간" +minutes+"분";
+        long totalMinutes = duration.toMinutes();
 
         String state = now.getHour() < 18 ? "조퇴": "정상";
 
-        attendance.checkOut(now, allTime, state);
-        attendanceRepository.save(attendance);
+        attendance.checkOut(now, totalMinutes, state);
     }
 }
