@@ -60,15 +60,13 @@ public class DashboardService {
                 .map(AttendanceRecordDTO::from)
                 .toList();
 
-        return DashboardResDTO.builder()
-                .name(employee.getName())
-                .position(employee.getPosition())
-                .role(employee.getRole())
-                .checkedInToday(checkedInToday)
-                .todayStartTime(todayStartTime)
-                .monthlyWorkDays(monthlyWorkDays)
-                .attendanceList(attendanceList)
-                .build();
+        return DashboardResDTO.of(
+                employee,
+                checkedInToday,
+                todayStartTime,
+                monthlyWorkDays,
+                attendanceList
+        );
     }
 
     // ==== 출근 처리 ====
