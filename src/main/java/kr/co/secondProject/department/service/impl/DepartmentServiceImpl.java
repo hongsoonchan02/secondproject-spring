@@ -35,7 +35,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public ResDepartmentCreateDTO departmentCreate(ReqDepartmentCreateDTO dto) {
 		//부서 생성 기능 부분                    // EmployeeRepository에서 구현해야함                         // 찾는 데이터가 없을때(사번으로 직원employee 엔티티)
-		Employee manager = employeeRepository.findByEmpNum(dto.getDpManagerEmpNum()).orElseThrow(() -> new NoSuchElementException("직원을 찾을 수 없습니다"));
+		Employee manager = employeeRepository.findByEmpId(dto.getDpManagerEmpId()).orElseThrow(() -> new NoSuchElementException("직원을 찾을 수 없습니다"));
 		Department dpEntity = Department.builder()
 				.dpCode(dto.getDpCode())
 				.dpName(dto.getDpName())
@@ -62,7 +62,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 	
 	// 부서 리스트 조회 및 검색
-		@Transactional(readOnly = true)
+		@Transactional(readOnly = true) 
+		
+		
 		public List<ResDepartmentListDTO> departmentList(String keyword) {
 			
 			List<ResDepartmentListDTO> response;
@@ -107,7 +109,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		// 부서 수정 기능                                                            // 수정하고자 하는 부서를 못 찾을때
 		Department updated = departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("찾는 부서가 없습니다."));
 			                                      // EmployeeRepository에 구현해야함                                // 잘못된 인자가 들어왔을때(부서 코드)
-		Employee empEntity = employeeRepository.findByEmpId(request.getDpManagerEmpNum()).orElseThrow(() -> new IllegalArgumentException("잘못된 부서 코드입니다."));
+		Employee empEntity = employeeRepository.findByEmpId(request.getDpManagerEmpId()).orElseThrow(() -> new IllegalArgumentException("잘못된 부서 코드입니다."));
 		updated.update(request.getDpName(), request.getDpDetail(), empEntity);
 		ResDepartmentUpdateDTO responseUpdate = ResDepartmentUpdateDTO.builder()
 				.dpManagerName(Optional.ofNullable(updated.getDpManager())

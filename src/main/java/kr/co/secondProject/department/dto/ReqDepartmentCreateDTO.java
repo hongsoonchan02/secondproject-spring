@@ -17,7 +17,7 @@ public class ReqDepartmentCreateDTO {
 	private String dpName;
 	
 	@Schema(description = "부서 관리자 사번", example = "#15461")
-	private String dpManagerEmpNum;
+	private String dpManagerEmpId;
 	
 	@Schema(description = "부서 설명", example = "주요 인프라")
 	private String dpDetail;
