@@ -37,5 +37,12 @@ public class Department {
 	
 	@OneToOne
 	@JoinColumn(name="dp_manager")
-	private Employee dpManager; // Employee 테이블과 조인
+	private Employee dpManager; // Employee 테이블과 조인 부서장 번호
+	
+	public void update(String dpName, String dpDetail, Employee manager) {
+	    this.dpName = dpName;
+	    this.dpDetail = dpDetail;
+	    this.dpManager = manager;
+	}
+	
 }
