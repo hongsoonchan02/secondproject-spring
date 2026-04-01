@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Department Api", description = "부서 관리 기능")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/department")
+@RequestMapping("/api/departments")
 public class DepartmentController {
 	
 	private final DepartmentService departmentService;
