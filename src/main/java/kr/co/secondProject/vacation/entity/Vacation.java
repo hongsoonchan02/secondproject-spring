@@ -25,9 +25,6 @@ public class Vacation {
 //	@JoinColumn(name="id")
 	private String proxyEmpId;		// 대리 신청자 ID
 	
-//	@JoinColumn(name="annual_code")
-	private String annualCode;		// 연차 코드
-	
 //	@JoinColumn(name="dp_num")
 	private String dpNum;
 	
@@ -40,7 +37,7 @@ public class Vacation {
 	
 	private LocalDateTime endTime;	// 휴가 끝일
 	
-	private Integer remaining;			// 잔여 휴가
+	private Double remaining;		// 잔여 휴가
 	
 	private Boolean approval;		// 승인 상태
 	
@@ -50,9 +47,7 @@ public class Vacation {
 	
 	private String reason;			// 기타 사유
 	
-	private int joinYears;			// 입사 연수
-	
-	private int annualNum;			// 연처 갯수
+
 
 	
 }

@@ -3,6 +3,7 @@ package  kr.co.secondProject.vacation.dto;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.secondProject.vacation.entity.Annual;
 import kr.co.secondProject.vacation.entity.Vacation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class ResVacationDTO {
 
 
 	@Schema(description = "휴가 일수", example = "1일")
-    private Integer remaining;
+    private Double remaining;
 
     /**
      * 승인 상태
@@ -69,6 +70,21 @@ public class ResVacationDTO {
     private String annualCode;
 	@Schema(description = "부서 코드", example = "ad-1001")
     private String dpNum;
+	
+    // ── 휴가 관리 화면 – 잔여/사용 통계 ─────────
+
+	@Schema(description = "잔여 연차", example = "15")
+    private Double remainingAnnual;
+
+	@Schema(description = "총 사용 연차", example = "3")
+    private Double usedAnnual;
+
+	@Schema(description = "승인 대기 건수", example = "2")
+    private Long pendingCount;
+
+	@Schema(description = "연차 유효 기간", example = "2026.04.01")
+    private String annualExpiry;
+
 
 	
 	/**
@@ -89,7 +105,6 @@ public class ResVacationDTO {
                 .approvalLabel(approvalLabel)
                 .kind(vacation.getKind())
                 .reason(vacation.getReason())
-                .annualCode(vacation.getAnnualCode())
                 .dpNum(vacation.getDpNum())
                 .employeeId(vacation.getEmployeeId())
                 .proxyEmpId(vacation.getProxyEmpId())

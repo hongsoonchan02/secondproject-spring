@@ -32,7 +32,7 @@ public class ReqVacationDTO {
 	private int remaining;			// 잔여 휴가
 	
 	@Schema(description = "승인 상태", example = "null")
-	private boolean approval;		// 승인 상태
+	private Boolean approval;		// 승인 상태
 	
 	@Schema(description = "휴가 사유", example = "교육")
 	private String kind;			// 휴가 종류

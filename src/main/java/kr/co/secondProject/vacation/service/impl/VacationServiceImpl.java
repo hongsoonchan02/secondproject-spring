@@ -1,5 +1,7 @@
 package kr.co.secondProject.vacation.service.impl;
 
+import java.time.LocalDate;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,30 @@ public class VacationServiceImpl implements VacationService{
         return vacationrepository
                 .findByEmployeeIdOrderByStartTimeDesc(employeeId, pageable)
                 .map(ResVacationDTO::from);
+    }
+    
+    
+    @Override
+    @Transactional(readOnly = true)
+    public ResVacationDTO getVacationSummary(Long employeeId) {
+    	int currentYear = LocalDate.now().getYear();
+
+        double totalAnnual = 15.0;   // TODO: annualRepository 에서 조회
+        double usedAnnual  = vacationrepository
+                .sumUsedVacationByYear(employeeId, currentYear);
+        double remaining   = totalAnnual - usedAnnual;
+
+        long pendingCount = vacationrepository.countByEmployeeIdAndApprovalIsNull(employeeId);
+
+        // 잔여 연차 유효기간: 해당 연도 마지막 날
+        String annualExpiry = currentYear + "년 12월 31일";
+
+        return ResVacationDTO.builder()
+                .remaining(remaining)
+                .usedAnnual(usedAnnual)
+                .pendingCount(pendingCount)
+                .annualExpiry(annualExpiry)
+                .build();
     }
 
 }
