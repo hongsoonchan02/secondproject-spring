@@ -85,11 +85,17 @@ public class ResVacationDTO {
 	@Schema(description = "연차 유효 기간", example = "2026.04.01")
     private String annualExpiry;
 
+	// ── 휴가 관리 화면 – 휴가 신청 대기열 ─────────
 
 	
-	/**
-     * 엔티티 → DTO 변환 (공통)
-     */
+	
+	
+	
+	
+	
+	
+	
+    // 엔티티 → DTO 변환 (공통)
     public static ResVacationDTO from(Vacation vacation) {
         String approvalLabel;
         if (vacation.getApproval() == null)      approvalLabel = "대기";

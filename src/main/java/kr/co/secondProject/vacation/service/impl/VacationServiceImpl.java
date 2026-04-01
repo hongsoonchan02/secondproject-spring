@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.secondProject.login.repository.EmployeeRepository;
 import kr.co.secondProject.vacation.dto.ResVacationDTO;
 import kr.co.secondProject.vacation.repository.VacationRepository;
 import kr.co.secondProject.vacation.service.VacationService;
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class VacationServiceImpl implements VacationService{
 	
 	private final VacationRepository vacationrepository;
-	private final EmployeeRepository employeeRepository;
 	
 	
 	// 로그인 유저 휴가 신청 이력 조회
@@ -33,12 +31,13 @@ public class VacationServiceImpl implements VacationService{
     }
     
     
+    // 로그인 유저 휴가 사용 통계
     @Override
     @Transactional(readOnly = true)
     public ResVacationDTO getVacationSummary(Long employeeId) {
     	int currentYear = LocalDate.now().getYear();
 
-        double totalAnnual = 15.0;   // TODO: annualRepository 에서 조회
+        double totalAnnual = 15.0;
         double usedAnnual  = vacationrepository
                 .sumUsedVacationByYear(employeeId, currentYear);
         double remaining   = totalAnnual - usedAnnual;
@@ -55,5 +54,23 @@ public class VacationServiceImpl implements VacationService{
                 .annualExpiry(annualExpiry)
                 .build();
     }
+    
+    // 휴가 신청 대기열(휴가 관리 페이지_관리자 등급)
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ResVacationDTO> getPendingQueue(Long loginEmployeeId, Pageable pageable) {
+        LocalDate now = LocalDate.now();
+        return vacationrepository
+                .findPendingQueueExcludeMe(loginEmployeeId, now.getYear(), now.getMonthValue(), pageable)
+                .map(vacation -> {
+                    ResVacationDTO dto = ResVacationDTO.from(vacation);
+                    /*
+                     * TODO: employeeRepository.findById(v.getEmployeeId()) 로
+                     *       신청자 이름·직책·프로필 사진을 채워주세요.
+                     */
+                    return dto;
+                });
+    }
+    
 
 }
