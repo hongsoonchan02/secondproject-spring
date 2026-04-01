@@ -19,4 +19,10 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     List<Attendance> findByEmployee_IdAndDateBetween(Long employeeId,
                                            LocalDateTime start, LocalDateTime end);
 
+
+    int countByEmployee_IdAndDateBetween(Long employeeId,
+                                         LocalDateTime start,
+                                         LocalDateTime end);
+    
+
 }
