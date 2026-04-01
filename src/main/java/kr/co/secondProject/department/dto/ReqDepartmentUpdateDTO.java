@@ -22,6 +22,6 @@ public class ReqDepartmentUpdateDTO {
 	private String dpManagerName;
 	
 	@Schema(description = "부서 관리자 사변", example = "#44572")
-	private String dpManagerEmpNum;
+	private String dpManagerEmpId;
 
 }

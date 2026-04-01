@@ -15,4 +15,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     int countByDpNum(Long id); // DepartmentServiceImpl의 부서검색에 쓰기 위한 메서드
     
     List<Employee> findByDpNum(Long DpNum);
+    
+    Optional<Employee> findByEmpId(String id);
 }
