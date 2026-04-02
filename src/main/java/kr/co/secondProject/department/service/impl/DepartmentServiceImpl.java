@@ -1,6 +1,8 @@
 package kr.co.secondProject.department.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,7 +32,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	private final EmployeeRepository employeeRepository;
 	private final DepartmentRepository departmentRepository;
 	
-	// 부서 추가
+	// 부서 생성
 	@Transactional
 	@Override
 	public ResDepartmentCreateDTO departmentCreate(ReqDepartmentCreateDTO dto) {
@@ -39,7 +41,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 		Department dpEntity = Department.builder()
 				.dpCode(dto.getDpCode())
 				.dpName(dto.getDpName())
-				.dpDetail(dto.getDpDetail()) 
+				.dpDetail(dto.getDpDetail())
+				.dpCreatedDate(LocalDateTime.now())
 				.dpManager(manager)
 				.build();
 		Department responseEntity = departmentRepository.save(dpEntity);
@@ -48,13 +51,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 	
 	// 최근 생성 부서 목록
-	public List<ResCurrentDpListDTO> currentDpList() {
-		List<Department> dpList = departmentRepository.findTop5ByOrderByDpNumDesc();
-		
+	public List<ResCurrentDpListDTO> currentDpList() {                                  // 부서 값이 없는건 정상적인 일이기 때문에
+		 																				// 에러가 안 나게 빈 문자열 반환
+		List<Department> dpList = departmentRepository.findTop5ByOrderByDpNumDesc().orElse(Collections.emptyList());
 		List<ResCurrentDpListDTO> responseList = dpList.stream()
 				.map(department -> ResCurrentDpListDTO.builder()
 						.dpCode(department.getDpCode())
 						.dpName(department.getDpName())
+						.dpCreatedDate(department.getDpCreatedDate())
 						.build())
 				.collect(Collectors.toList());
 		
@@ -62,9 +66,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 	
 	// 부서 리스트 조회 및 검색
-		@Transactional(readOnly = true) 
-		
-		
+		@Transactional(readOnly = true)
+		@Override
 		public List<ResDepartmentListDTO> departmentList(String keyword) {
 			
 			List<ResDepartmentListDTO> response;
@@ -105,6 +108,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	
 	// 부서 관리(수정)
 	@Transactional
+	@Override
 	public ResDepartmentUpdateDTO departmentUpdate(Long id, ReqDepartmentUpdateDTO request) {
 		// 부서 수정 기능                                                            // 수정하고자 하는 부서를 못 찾을때
 		Department updated = departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("찾는 부서가 없습니다."));
@@ -126,8 +130,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 		
 		}
 	
+	// 부서 수정 정보 조회
+	@Transactional(readOnly = true)
+	@Override
+	public ResDepartmentUpdateDTO departmentDetail(Long id) {
+		Department updateDetail = departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("찾는 부서가 없습니다."));
+		ResDepartmentUpdateDTO detail = ResDepartmentUpdateDTO.from(updateDetail);
+		return detail;
+	}
+	
+	
+	@Transactional(readOnly = true)
+	@Override
 	public List<ResUpdateMemberListDTO> updateList(Long id) {
-		
 		// 해당 부서 부서원 목록 조회
 		List<Employee> employee = employeeRepository.findByDpNum(id); // EmployeeRepository 부서 코드 FK에 해당하는 부서원만 찾기
 		List<ResUpdateMemberListDTO> responseMember = employee.stream()
@@ -145,6 +160,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	
 	// 부서 관리(삭제)
 	@Transactional
+	@Override
 	public void departmentDelete(Long id) {
 		Department department = departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("삭제할 부서가 없습니다."));
 		
@@ -152,19 +168,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 		
 	}
 	
-	// 평균 근속을 구하기 위한 매서드
+	// 평균 근속을 구하기 위한 매서드\
+	@Override
 	public float averegeYear(Department department) {
-		
 		List<Employee> employeeEntity = employeeRepository.findByDpNum(department.getDpNum());
-		
 		int currentYear = LocalDate.now().getYear();
-		
 		int totalYear = employeeEntity.stream()
 				.mapToInt(emp -> currentYear - emp.getHireDate().getYear())
 				.sum();
-		
 		float averegeYear = totalYear / employeeRepository.count();
-		
 		return averegeYear;
 	}
 

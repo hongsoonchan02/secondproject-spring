@@ -123,6 +123,6 @@ public class DashboardService {
 
         String state = now.getHour() < 18 ? "조퇴": "정상";
 
-        attendance.checkOut(now, totalMinutes, state);
+//        attendance.checkOut(now, totalMinutes, state);
     }
 }
