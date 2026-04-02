@@ -1,16 +1,10 @@
 package kr.co.secondProject.department.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import kr.co.secondProject.login.entity.Employee;
+import kr.co.secondProject.department.entity.Department;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter; 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
@@ -18,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResDepartmentUpdateDTO {
+	
+	@Schema(description = "부서 번호", example = "1")
+	private Long dpNum;
 
 	@Schema(description = "부서 이름", example = "시스템 엔지니어링")
 	private String dpName;
@@ -31,4 +28,16 @@ public class ResDepartmentUpdateDTO {
 	@Schema(description = "부서 관리자 직책", example = "매니저")
 	private String dpManagerPosition;
 	
+	
+	public ResDepartmentUpdateDTO toDto (Department dp) {
+		ResDepartmentUpdateDTO response = ResDepartmentUpdateDTO.builder()
+				.dpNum(dp.getDpNum())
+				.dpName(dp.getDpName())
+				.dpDetail(dp.getDpDetail())
+				.dpManagerName(dp.getDpManager().getName())
+				.dpManagerPosition(dp.getDpManager().getPosition())
+				.build();
+		
+		return response;		
+	}
 }
