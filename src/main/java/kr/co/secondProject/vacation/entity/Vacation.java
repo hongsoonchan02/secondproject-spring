@@ -1,23 +1,27 @@
 package kr.co.secondProject.vacation.entity;
 
-
 import java.time.LocalDateTime;
-
-import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor 
 @Table(name = "vacation")
 public class Vacation {
 	
+	private String annualCode;
 	
 //	@JoinColumn(name="id")
     private Long employeeId;        // 직원 ID
@@ -46,6 +50,8 @@ public class Vacation {
 	private String kind;			// 휴가 사유(교육,병가, 경조사, 기타)
 	
 	private String reason;			// 기타 사유
+
+
 	
 
 

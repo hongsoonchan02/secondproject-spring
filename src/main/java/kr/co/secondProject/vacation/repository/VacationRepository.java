@@ -11,7 +11,9 @@ import kr.co.secondProject.vacation.entity.Vacation;
 
 public interface VacationRepository extends JpaRepository<Vacation, Long>{
 	
-	
+	/*
+	 * 휴가 관리 페이지 
+	 */
 	
 	// 로그인 유저 휴가 신청 대기 건수
 	long countByEmployeeIdAndApprovalIsNull(Long employeeId);
@@ -47,5 +49,14 @@ public interface VacationRepository extends JpaRepository<Vacation, Long>{
                                              @Param("year") int year,
                                              @Param("month") int month,
                                              Pageable pageable);
+	
+	
+	// -----------------------------------------------------------------------------------------------------------------------------
+    
+    /*
+     * 휴가 신청 페이지
+     */
+	
+	
 		
 }

@@ -3,13 +3,9 @@ package  kr.co.secondProject.vacation.dto;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import kr.co.secondProject.vacation.entity.Annual;
 import kr.co.secondProject.vacation.entity.Vacation;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+
 
 @Getter
 @NoArgsConstructor
@@ -60,12 +56,6 @@ public class ResVacationDTO {
 	@Schema(description = "기타 상세사유", example = "개인 사정")
     private String reason;
 	
-	@Schema(description = "직원 코드", example = "1001")
-	private Long employeeId;
-	
-	@Schema(description = "대리 신청자 코드", example = "1001")
-	private String proxyEmpId;
-
 	@Schema(description = "연차 코드", example = "15")
     private String annualCode;
 	@Schema(description = "부서 코드", example = "ad-1001")
@@ -85,7 +75,31 @@ public class ResVacationDTO {
 	@Schema(description = "연차 유효 기간", example = "2026.04.01")
     private String annualExpiry;
 
-	// ── 휴가 관리 화면 – 휴가 신청 대기열 ─────────
+	// ── 신청자 정보 ──────────────────────────────
+
+	@Schema(description = "직원 코드", example = "1001")
+    private Long employeeId;
+
+	@Schema(description = "이름", example = "홍길동")
+    private String employeeName;
+
+	@Schema(description = "직급", example = "직원")
+    private String position;
+
+	@Schema(description = "부서명", example = "재무팀")
+    private String departmentName;
+
+	@Schema(description = "사원 번호", example = "DGE-1001")
+    private String empId;
+
+	@Schema(description = "프로필 사진", example = "htrjrtj4re6rh1561")
+    private String profilePhoto;
+
+    // ── 대리 신청 ────────────────────────────────
+	
+	// 대리 신청자 없으면 null
+    @Schema(description = "대리 신청자 코드", example = "1001")
+    private String proxyEmpId;
 
 	
 	
@@ -93,9 +107,15 @@ public class ResVacationDTO {
 	
 	
 	
+
 	
 	
-    // 엔티티 → DTO 변환 (공통)
+	// -----------------------------------------------------------------------------------------------------------------------------
+	
+	/*
+     * 엔티티 → DTO 변환 (공통)
+     */
+
     public static ResVacationDTO from(Vacation vacation) {
         String approvalLabel;
         if (vacation.getApproval() == null)      approvalLabel = "대기";
