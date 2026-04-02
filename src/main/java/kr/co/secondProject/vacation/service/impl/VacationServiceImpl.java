@@ -110,8 +110,6 @@ public class VacationServiceImpl implements VacationService{
         }
 
         // ── 대리 신청 여부 판단 ─────────────────────────────────
-        // proxyEmpId 가 있으면 대리 신청 → 대상자는 dto.getTargetEmployeeId()
-        // 없으면 본인 신청 → 대상자는 loginEmployeeId
         boolean isProxy       = dto.getProxyEmpId() != null && !dto.getProxyEmpId().isBlank();
         long targetEmpId  = isProxy ? dto.getTargetEmployeeId() : loginEmployeeId; 
         String  proxyEmpId    = isProxy ? dto.getProxyEmpId() : null;
@@ -128,7 +126,6 @@ public class VacationServiceImpl implements VacationService{
         }
 
         // ── 종료일 계산 ─────────────────────────────────────────
-        // 0.5일(반차)은 당일 종료, 그 외에는 시작일 + (usedDays - 1) 일
         LocalDateTime endTime;
         if (Double.compare(dto.getUsedDays(), 0.5) == 0) {
             endTime = dto.getStartTime();
@@ -209,14 +206,41 @@ public class VacationServiceImpl implements VacationService{
                         .kind(dto.getKind())
                         .reason(dto.getReason())
                         .empId(employee.getEmpId())
-                        .employeeName(employee.getName())   // 실제 필드명 확인 필요
-                        .position(employee.getPosition())   // 실제 필드명 확인 필요
+                        .employeeName(employee.getName())
+                        .position(employee.getPosition())
                         .build();
             }
             
             
             return dto;
         });
+    }
+    
+    
+    // 휴가 신청 승인
+    @Override
+    @Transactional
+    public ResVacationDTO approveVacation(Long vacationCode) {
+        Vacation vacation = getVacationOrThrow(vacationCode);
+        vacation.setApproval(true);
+        return ResVacationDTO.from(vacationrepository.save(vacation));
+    }
+
+    // 휴가 신청 반려
+    @Override
+    @Transactional
+    public ResVacationDTO rejectVacation(Long vacationCode) {
+        Vacation vacation = getVacationOrThrow(vacationCode);
+        vacation.setApproval(false);
+        return ResVacationDTO.from(vacationrepository.save(vacation));
+    }
+
+
+    // 잔여 휴가 조회
+    private Vacation getVacationOrThrow(Long vacationCode) {
+        return vacationrepository.findById(vacationCode)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "해당 휴가 신청을 찾을 수 없습니다. vacationCode=" + vacationCode));
     }
     
 

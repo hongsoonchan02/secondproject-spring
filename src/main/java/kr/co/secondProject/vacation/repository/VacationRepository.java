@@ -20,10 +20,7 @@ public interface VacationRepository extends JpaRepository<Vacation, Long>{
 	// 로그인 유저 휴가 신청 대기 건수
 	long countByEmployeeIdAndApprovalIsNull(Long employeeId);
 
-	/**
-	 * 해당 연도에 승인된 사용 휴가 합계
-	 * ※해당 기능을 react 처리시 보안상 안 좋음
-	 */
+	// 사용 휴가 갯수
 	@Query("""
             SELECT COALESCE(SUM(v.remaining), 0)
             FROM Vacation v

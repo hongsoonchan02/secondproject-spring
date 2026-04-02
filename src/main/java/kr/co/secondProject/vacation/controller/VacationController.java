@@ -9,6 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import kr.co.secondProject.vacation.dto.ReqVacationDTO;
@@ -137,6 +138,10 @@ public class VacationController {
      * 연차 관리 페이지 (관리자 등급)
      */
 	
+	@Operation(
+			summary = "관리자 휴가 신청 통계",
+			description = "로그인 유저 외 모든 직원 휴가신청 통계"
+			)
 	// 휴가 신청 통계
 	@GetMapping("/stats")
     public ResponseEntity<ResVacationDTO> getStats(
@@ -154,7 +159,10 @@ public class VacationController {
         return ResponseEntity.ok(vacationService.getVacationListStats(lastCheckedAt));
     }
 	
-	
+	@Operation(
+			summary = "관리자 휴가 신청 목록",
+			description = "로그인 유저 외 모든 직원 휴가신청 사유별 목록조회"
+			)
 	// 탭별 휴가 목록 페이징 조회
 	@GetMapping("/list")
     public ResponseEntity<Page<ResVacationDTO>> getList(
@@ -173,5 +181,40 @@ public class VacationController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(vacationService.getVacationListByKind(kind, pageable));
     }
+	
+	@Operation(summary = "휴가 신청 승인")
+	// 휴가 승인
+    @PatchMapping("/{vacationCode}/approve")
+    public ResponseEntity<ResVacationDTO> approve(
+            @PathVariable Long vacationCode,
+            HttpSession session) {
+
+        Long loginId = getLoginId(session);
+        if (loginId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        if (!isManagerOrAdmin(session)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        return ResponseEntity.ok(vacationService.approveVacation(vacationCode));
+    }
+
+	@Operation(summary = "휴가 신청 반려")
+    // 휴가 반려
+    @PatchMapping("/{vacationCode}/reject")
+    public ResponseEntity<ResVacationDTO> reject(
+            @PathVariable Long vacationCode,
+            HttpSession session) {
+
+        Long loginId = getLoginId(session);
+        if (loginId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        if (!isManagerOrAdmin(session)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        return ResponseEntity.ok(vacationService.rejectVacation(vacationCode));
+    }
+	
 
 }

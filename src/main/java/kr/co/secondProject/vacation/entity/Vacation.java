@@ -11,10 +11,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor 
@@ -45,14 +47,11 @@ public class Vacation {
 	
 	private Boolean approval;		// 승인 상태
 	
-	private String approvalLabel;   // 승인 상태 라벨
+	
 	
 	private String kind;			// 휴가 사유(교육,병가, 경조사, 기타)
 	
 	private String reason;			// 기타 사유
-
-
-	
 
 
 	
