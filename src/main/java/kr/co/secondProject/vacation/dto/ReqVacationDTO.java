@@ -13,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Schema(description = "휴가 신청 DTO")
 public class ReqVacationDTO {
 	
 	@Schema(description = "연차 코드", example = "de-1001")
