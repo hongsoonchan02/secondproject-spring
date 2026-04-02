@@ -1,8 +1,11 @@
 package kr.co.secondProject.vacation.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,6 +77,7 @@ public class VacationController {
 			summary = "관리자 휴가 승인 대기열",
 			description = "본인을 제외한 모든 유저의 휴가 신청 목록을 조회합니다."
 			)
+	
 	// 휴가 신청 대기열 목록 (관리자 등급)
 	@GetMapping("/pending")
     public ResponseEntity<Page<ResVacationDTO>> getPendingQueue(
@@ -126,5 +130,29 @@ public class VacationController {
         ResVacationDTO result = vacationService.requestVacation(loginId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+	
+	// -----------------------------------------------------------------------------------------------------------------------------
+    
+    /*
+     * 연차 관리 페이지 (관리자 등급)
+     */
+	
+	// 휴가 신청 통계
+	@GetMapping("/stats")
+    public ResponseEntity<ResVacationDTO> getStats(
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastCheckedAt,
+            HttpSession session) {
+
+        Long loginId = getLoginId(session);
+        if (loginId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        if (!isManagerOrAdmin(session)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        return ResponseEntity.ok(vacationService.getVacationListStats(lastCheckedAt));
+    }
+	
 
 }

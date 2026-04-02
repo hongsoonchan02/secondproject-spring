@@ -1,5 +1,7 @@
 package kr.co.secondProject.vacation.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,5 +30,26 @@ public interface VacationService {
      */
 	
 	ResVacationDTO requestVacation(Long loginEmployeeId, ReqVacationDTO dto);
+	
+	
+	// -----------------------------------------------------------------------------------------------------------------------------
+
+    /*
+     * 연차 관리 페이지 (관리자 등급)
+     */
+	
+
+    // 연차 관리 이력 통계 카드 데이터
+    ResVacationDTO getVacationListStats(LocalDateTime lastCheckedAt);
+
+    // 탭별 휴가 목록 페이징 조회
+    Page<ResVacationDTO> getVacationListByKind(String kind, Pageable pageable);
+
+    // 휴가 승인
+    ResVacationDTO approveVacation(Long vacationCode);
+
+    // 휴가 반려
+    ResVacationDTO rejectVacation(Long vacationCode);
+	
 	
 }

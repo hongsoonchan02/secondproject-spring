@@ -101,15 +101,24 @@ public class ResVacationDTO {
     @Schema(description = "대리 신청자 코드", example = "1001")
     private String proxyEmpId;
 
-	
-	
-	
-	
-	
+    // ── 연차 관리 이력 – 통계 카드 ───────────────
+
+    @Schema(description = "대기", example = "12")
+    private Long totalPending;
+
+    @Schema(description = "승인", example = "05")
+    private Long totalApproved;
+
+    @Schema(description = "반려", example = "05")
+    private Long totalRejected;
+
+    @Schema(description = "이번달 휴가 인원", example = "05")
+    private Long thisMonthVacationCount;
+
+    @Schema(description = "신규추가 대기", example = "+2 New")
+    private Long newRequestCount;
 	
 
-	
-	
 	// -----------------------------------------------------------------------------------------------------------------------------
 	
 	/*

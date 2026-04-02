@@ -152,7 +152,36 @@ public class VacationServiceImpl implements VacationService{
         return ResVacationDTO.from(vacation);
     }
     
+	// -----------------------------------------------------------------------------------------------------------------------------
     
+    /*
+     * 연차 관리 페이지 (관리자 등급)
+     */
+    
+    
+    // 휴가 신청 통계
+    @Override
+    @Transactional(readOnly = true)
+    public ResVacationDTO getVacationListStats(LocalDateTime lastCheckedAt) {
+        LocalDate now = LocalDate.now();
+
+        long totalPending           = vacationrepository.countByApprovalIsNull();
+        long totalApproved          = vacationrepository.countByApprovalTrue();
+        long totalRejected          = vacationrepository.countByApprovalFalse();
+        long thisMonthVacationCount = vacationrepository
+                .countDistinctEmployeeOnVacationThisMonth(now.getYear(), now.getMonthValue());
+        long newRequestCount        = lastCheckedAt != null
+                ? vacationrepository.countByApprovalIsNullAndStartTimeAfter(lastCheckedAt)
+                : 0L;
+
+        return ResVacationDTO.builder()
+                .totalPending(totalPending)
+                .totalApproved(totalApproved)
+                .totalRejected(totalRejected)
+                .thisMonthVacationCount(thisMonthVacationCount)
+                .newRequestCount(newRequestCount)
+                .build();
+    }
     
 
 }

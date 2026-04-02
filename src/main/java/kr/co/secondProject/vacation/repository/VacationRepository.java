@@ -1,6 +1,8 @@
 package kr.co.secondProject.vacation.repository;
 
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -53,10 +55,33 @@ public interface VacationRepository extends JpaRepository<Vacation, Long>{
 	
 	// -----------------------------------------------------------------------------------------------------------------------------
     
+
     /*
-     * 휴가 신청 페이지
+     * 연차 관리 페이지 (관리자 등급)
      */
 	
+	// 휴가 신청 대기
+	long countByApprovalIsNull();
+
+	// 휴가 신청 승인
+    long countByApprovalTrue();
+
+    // 휴가 신청 반려
+    long countByApprovalFalse();
+
+    // 휴가 인원
+    @Query("""
+            SELECT COUNT(DISTINCT v.employeeId)
+            FROM Vacation v
+            WHERE YEAR(v.startTime) = :year
+              AND MONTH(v.startTime) = :month
+              AND v.approval = true
+            """)
+    long countDistinctEmployeeOnVacationThisMonth(@Param("year") int year,
+                                                  @Param("month") int month);
+	
+    // 신규 신청
+    long countByApprovalIsNullAndStartTimeAfter(LocalDateTime lastCheckedAt);
 	
 		
 }
