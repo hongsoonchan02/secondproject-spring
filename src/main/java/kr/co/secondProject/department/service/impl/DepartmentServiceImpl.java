@@ -52,7 +52,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	
 	// 최근 생성 부서 목록
 	public List<ResCurrentDpListDTO> currentDpList() {
-		List<Department> dpList = departmentRepository.findTop5ByorderByIdDesc();
+		List<Department> dpList = departmentRepository.findTop5ByOrderByDpNumDesc();
 		
 		List<ResCurrentDpListDTO> responseList = dpList.stream()
 				.map(department -> ResCurrentDpListDTO.builder()
