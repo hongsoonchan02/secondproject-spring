@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.secondProject.login.entity.Employee;
 import kr.co.secondProject.login.repository.EmployeeRepository;
 import kr.co.secondProject.vacation.dto.ReqVacationDTO;
 import kr.co.secondProject.vacation.dto.ResVacationDTO;
@@ -158,7 +159,6 @@ public class VacationServiceImpl implements VacationService{
      * 연차 관리 페이지 (관리자 등급)
      */
     
-    
     // 휴가 신청 통계
     @Override
     @Transactional(readOnly = true)
@@ -181,6 +181,42 @@ public class VacationServiceImpl implements VacationService{
                 .thisMonthVacationCount(thisMonthVacationCount)
                 .newRequestCount(newRequestCount)
                 .build();
+    }
+    
+    // 탭별 휴가 목록 페이징 조회
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ResVacationDTO> getVacationListByKind(String kind, Pageable pageable) {
+        boolean isAll = kind == null || kind.isBlank() || "전체".equals(kind);
+        Page<Vacation> page = isAll
+                ? vacationrepository.findAllByOrderByStartTimeDesc(pageable)
+                : vacationrepository.findByKindOrderByStartTimeDesc(kind, pageable);
+
+        return page.map(v -> {
+            ResVacationDTO dto = ResVacationDTO.from(v);
+            
+            Employee employee = employeerepository.findById(v.getEmployeeId())
+                    .orElse(null);
+
+            if (employee != null) {
+                return ResVacationDTO.builder()
+                        .vacationCode(dto.getVacationCode())
+                        .startTime(dto.getStartTime())
+                        .endTime(dto.getEndTime())
+                        .remaining(dto.getRemaining())
+                        .approval(dto.getApproval())
+                        .approvalLabel(dto.getApprovalLabel())
+                        .kind(dto.getKind())
+                        .reason(dto.getReason())
+                        .empId(employee.getEmpId())
+                        .employeeName(employee.getName())   // 실제 필드명 확인 필요
+                        .position(employee.getPosition())   // 실제 필드명 확인 필요
+                        .build();
+            }
+            
+            
+            return dto;
+        });
     }
     
 

@@ -154,5 +154,24 @@ public class VacationController {
         return ResponseEntity.ok(vacationService.getVacationListStats(lastCheckedAt));
     }
 	
+	
+	// 탭별 휴가 목록 페이징 조회
+	@GetMapping("/list")
+    public ResponseEntity<Page<ResVacationDTO>> getList(
+            @RequestParam(required = false) String kind,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            HttpSession session) {
+
+        Long loginId = getLoginId(session);
+        if (loginId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        if (!isManagerOrAdmin(session)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(vacationService.getVacationListByKind(kind, pageable));
+    }
 
 }

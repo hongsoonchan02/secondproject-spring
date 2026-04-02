@@ -83,5 +83,10 @@ public interface VacationRepository extends JpaRepository<Vacation, Long>{
     // 신규 신청
     long countByApprovalIsNullAndStartTimeAfter(LocalDateTime lastCheckedAt);
 	
-		
+    // 전체 휴가 목록 페이징 조회
+    Page<Vacation> findAllByOrderByStartTimeDesc(Pageable pageable);
+    
+    // 사유별 휴가 목록 페이징 조회
+    Page<Vacation> findByKindOrderByStartTimeDesc(String kind, Pageable pageable);
+    
 }
