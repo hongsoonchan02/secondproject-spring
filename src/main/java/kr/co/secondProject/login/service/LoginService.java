@@ -1,6 +1,5 @@
 package kr.co.secondProject.login.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import kr.co.secondProject.login.dto.LoginReqDTO;
 import kr.co.secondProject.login.dto.LoginResDTO;
 import kr.co.secondProject.login.entity.Employee;
@@ -15,7 +14,6 @@ public class LoginService {
     private final EmployeeRepository employeeRepository;
 
     //로그인 처리
-    @Transactional(readOnly= true)
     public LoginResDTO login(LoginReqDTO req){
 
         //1. 이메일로 직원 찾기
