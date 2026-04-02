@@ -119,7 +119,7 @@ public class DashboardService {
         LocalDateTime now = LocalDateTime.now();
 
         Duration duration = Duration.between(attendance.getStartTime(), now);
-        long totalMinutes = duration.toMinutes();
+        String totalMinutes  =String.valueOf(duration.toMinutes());
 
         String state = now.getHour() < 18 ? "조퇴": "정상";
 
