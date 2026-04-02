@@ -29,7 +29,7 @@ public class ResDepartmentUpdateDTO {
 	private String dpManagerPosition;
 	
 	
-	public ResDepartmentUpdateDTO toDto (Department dp) {
+	public static ResDepartmentUpdateDTO from (Department dp) {
 		ResDepartmentUpdateDTO response = ResDepartmentUpdateDTO.builder()
 				.dpNum(dp.getDpNum())
 				.dpName(dp.getDpName())

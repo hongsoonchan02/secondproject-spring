@@ -26,6 +26,9 @@ public class ResDepartmentCreateDTO {
 	@Schema(description = "부서 생성일", example = "2026-04-02")
 	private LocalDateTime dpCreatedDate; 
 	
+
+	
+	
 	
 	public static ResDepartmentCreateDTO from (Department department) {
 		ResDepartmentCreateDTO response = ResDepartmentCreateDTO.builder()

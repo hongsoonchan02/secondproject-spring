@@ -2,6 +2,7 @@ package kr.co.secondProject.department.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,7 +31,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final DepartmentRepository departmentRepository;
-	private final ResDepartmentUpdateDTO resDepartmentUpdateDTO;
 	
 	// 부서 생성
 	@Transactional
@@ -51,9 +51,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 	
 	// 최근 생성 부서 목록
-	public List<ResCurrentDpListDTO> currentDpList() {
-		List<Department> dpList = departmentRepository.findTop5ByOrderByDpNumDesc();
-		
+	public List<ResCurrentDpListDTO> currentDpList() {                                  // 부서 값이 없는건 정상적인 일이기 때문에
+		 																				// 에러가 안 나게 빈 문자열 반환
+		List<Department> dpList = departmentRepository.findTop5ByOrderByDpNumDesc().orElse(Collections.emptyList());
 		List<ResCurrentDpListDTO> responseList = dpList.stream()
 				.map(department -> ResCurrentDpListDTO.builder()
 						.dpCode(department.getDpCode())
@@ -135,7 +135,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public ResDepartmentUpdateDTO departmentDetail(Long id) {
 		Department updateDetail = departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("찾는 부서가 없습니다."));
-		ResDepartmentUpdateDTO detail = resDepartmentUpdateDTO.toDto(updateDetail);
+		ResDepartmentUpdateDTO detail = ResDepartmentUpdateDTO.from(updateDetail);
 		return detail;
 	}
 	
