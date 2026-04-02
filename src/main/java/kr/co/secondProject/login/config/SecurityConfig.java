@@ -39,7 +39,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173"
         ));
-        config.setAllowedMethods(List.of("GET", "POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST","PUT", "PATCH","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 

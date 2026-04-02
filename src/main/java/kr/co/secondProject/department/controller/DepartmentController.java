@@ -36,7 +36,7 @@ public class DepartmentController {
 	
 	@Operation(summary = "메인 화면", description = "헤더, 부서 리스트 조회 및 검색")
 	@GetMapping
-	public ResponseEntity<List<ResDepartmentListDTO>> show(@RequestParam String keyword) {
+	public ResponseEntity<List<ResDepartmentListDTO>> show(@RequestParam("keyword") String keyword) {
 	
 		List<ResDepartmentListDTO> dpConstruct = departmentService.departmentList(keyword);
 		
@@ -67,7 +67,7 @@ public class DepartmentController {
 	
 	@Operation(summary = "부서 수정탭 부서원 리스트", description = "부서 id로 부서원 리스트 조회")
 	@GetMapping("/members/{id}")
-	public ResponseEntity<List<ResUpdateMemberListDTO>> dpMemberList(@PathVariable Long id) {
+	public ResponseEntity<List<ResUpdateMemberListDTO>> dpMemberList(@PathVariable("id") Long id) {
 		
 		List<ResUpdateMemberListDTO> responseList = departmentService.updateList(id);
 		
@@ -78,7 +78,7 @@ public class DepartmentController {
 	
 	@Operation(summary = "부서 수정", description = "부서 id로 조회 후 수정")
 	@PatchMapping("/{id}")
-	public ResponseEntity<ResDepartmentUpdateDTO> update(@PathVariable Long id, @RequestBody ReqDepartmentUpdateDTO dto) {
+	public ResponseEntity<ResDepartmentUpdateDTO> update(@PathVariable("id") Long id, @RequestBody ReqDepartmentUpdateDTO dto) {
 		ResDepartmentUpdateDTO response = departmentService.departmentUpdate(id, dto);
 		
 		return (response != null) ?
@@ -87,7 +87,7 @@ public class DepartmentController {
 	}
 	@Operation(summary = "부서 조회", description = "특정 부서 조회용")
 	@GetMapping("/{id}")
-	public ResponseEntity<ResDepartmentUpdateDTO> detail(@PathVariable Long id) {
+	public ResponseEntity<ResDepartmentUpdateDTO> detail(@PathVariable("id") Long id) {
 		ResDepartmentUpdateDTO response = departmentService.departmentDetail(id);
 		
 		return (response != null) ?
@@ -97,7 +97,7 @@ public class DepartmentController {
 	
 	@Operation(summary = "부서 삭제", description = "부서 id에 맞는 부서 삭제")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@PathVariable Long id) {
+	public ResponseEntity<String> delete(@PathVariable("id") Long id) {
 		departmentService.departmentDelete(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).body("삭제 완료");

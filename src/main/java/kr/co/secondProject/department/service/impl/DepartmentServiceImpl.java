@@ -77,6 +77,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 				List<Department> dpList = departmentRepository.findAll();
 				response = dpList.stream()
 						.map(department -> ResDepartmentListDTO.builder()
+								.dpNum(department.getDpNum())
 								.dpCode(department.getDpCode())
 								.dpName(department.getDpName())
 								.dpManagerName(Optional.ofNullable(department.getDpManager())
@@ -91,6 +92,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 				List<Department> dpList = departmentRepository.findByDpNameContaining(keyword);
 				response = dpList.stream()
 						.map(department -> ResDepartmentListDTO.builder()
+								.dpNum(department.getDpNum())
 								.dpCode(department.getDpCode())
 								.dpName(department.getDpName())
 								.dpManagerName(Optional.ofNullable(department.getDpManager())

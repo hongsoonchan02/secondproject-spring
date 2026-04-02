@@ -25,49 +25,49 @@ public class DashboardService {
     private final EmployeeRepository employeeRepository;
     private final AttendanceRepository attendanceRepository;
 
-    @Transactional(readOnly = true)
-    public DashboardResDTO getDashboardInfo(Long employeeId) {
-
-            Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("직원을 찾을 수 없습니다."));
-
-            LocalDateTime todayStart = LocalDateTime.now()
-                    .toLocalDate()
-                    .atStartOfDay();
-
-            Optional<Attendance> todayRecord =
-                attendanceRepository.findByEmployee_IdAndDate(employeeId, todayStart);
-
-            boolean checkedInToday = todayRecord.isPresent();
-            LocalDateTime todayStartTime = checkedInToday
-                ? todayRecord.get().getStartTime()
-                : null;
-
-        YearMonth yearMonth = YearMonth.now();
-
-        LocalDateTime start = yearMonth.atDay(1).atStartOfDay();
-        //atEndOfMonth() -> 이번달 마지막날 23:59:59
-        LocalDateTime end = yearMonth.atEndOfMonth().atTime(23, 59, 59);
-
-        int monthlyWorkDays =
-                attendanceRepository.countByEmployee_IdAndDateBetween(employeeId,start, end);
-
-
-        //전체 출근 기록 목록 변환
-        List<AttendanceRecordDTO> attendanceList = attendanceRepository
-                .findByEmployee_IdAndDateBetween(employeeId,start,end)
-                .stream()
-                .map(AttendanceRecordDTO::from)
-                .toList();
-
-        return DashboardResDTO.of(
-                employee,
-                checkedInToday,
-                todayStartTime,
-                monthlyWorkDays,
-                attendanceList
-        );
-    }
+//    @Transactional(readOnly = true)
+//    public DashboardResDTO getDashboardInfo(Long employeeId) {
+//
+//            Employee employee = employeeRepository.findById(employeeId)
+//                .orElseThrow(() -> new RuntimeException("직원을 찾을 수 없습니다."));
+//
+//            LocalDateTime todayStart = LocalDateTime.now()
+//                    .toLocalDate()
+//                    .atStartOfDay();
+//
+//            Optional<Attendance> todayRecord =
+//                attendanceRepository.findByEmployee_IdAndDate(employeeId, todayStart);
+//
+//            boolean checkedInToday = todayRecord.isPresent();
+//            LocalDateTime todayStartTime = checkedInToday
+//                ? todayRecord.get().getStartTime()
+//                : null;
+//
+//        YearMonth yearMonth = YearMonth.now();
+//
+//        LocalDateTime start = yearMonth.atDay(1).atStartOfDay();
+//        //atEndOfMonth() -> 이번달 마지막날 23:59:59
+//        LocalDateTime end = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+//
+//        int monthlyWorkDays =
+//                attendanceRepository.countByEmployee_IdAndDateBetween(employeeId,start, end);
+//
+//
+//        //전체 출근 기록 목록 변환
+//        List<AttendanceRecordDTO> attendanceList = attendanceRepository
+//                .findByEmployee_IdAndDateBetween(employeeId,start,end)
+//                .stream()
+//                .map(AttendanceRecordDTO::from)
+//                .toList();
+//
+//        return DashboardResDTO.of(
+//                employee,
+//                checkedInToday,
+//                todayStartTime,
+//                monthlyWorkDays,
+//                attendanceList
+//        );
+//    }
 
     // ==== 출근 처리 ====
     @Transactional
