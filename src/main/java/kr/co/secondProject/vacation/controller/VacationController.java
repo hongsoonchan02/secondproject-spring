@@ -215,6 +215,5 @@ public class VacationController {
 
         return ResponseEntity.ok(vacationService.rejectVacation(vacationCode));
     }
-	
 
 }
