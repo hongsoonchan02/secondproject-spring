@@ -38,7 +38,7 @@ public class AttendanceRecordDTO {
                 .date(a.getDate())
                 .startTime(a.getStartTime())
                 .endTime(a.getEndTime())
-                .allTime(a.getAllTime())
+                .allTime(a.getAllTime() != null ? String.valueOf(a.getAllTime()) : null)
                 .state(a.getState())
                 .build();
 
