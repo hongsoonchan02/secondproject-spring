@@ -92,9 +92,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.setDate(reqDto.getDate());
         attendance.setStartTime(reqDto.getStartTime());
         attendance.setState("출근중");  // 퇴근 전 임시 상태
-
-        Attendance saved = attendanceRepository.save(attendance);
-        return ResAttendanceDTO.from(saved);
+        
+        return ResAttendanceDTO.from(attendance);
     }
 
 
@@ -126,8 +125,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                     attendance.getStartTime().isAfter(standardTime) ? "지각" : "정상");
         }
 
-        Attendance saved = attendanceRepository.save(attendance);
-        return ResAttendanceDTO.from(saved);
+        return ResAttendanceDTO.from(attendance);
     }
 
 
