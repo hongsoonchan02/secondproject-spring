@@ -19,9 +19,9 @@ public class DashbordController {
 
     @GetMapping("/{employeeId}")
     @Operation(summary = "대시보드 조회", description = "직원 ID로 대시보드 전체 정보 조회")
-    public ResponseEntity<DashboardResDTO> getDashboard(@PathVariable Long employeeId) {
-        return ResponseEntity.ok(dashboardService.getDashboardInfo(employeeId));
-    }
+   	public ResponseEntity<DashboardResDTO> getDashboard(@PathVariable Long employeeId) {
+       return ResponseEntity.ok(dashboardService.getDashboardInfo(employeeId));   
+       }
 
     @PostMapping("/{employeeId}/checkin")
     @Operation(summary = "출근 처리", description = "출근 버튼 클릭 시 출근 처리. 이미 출근한 경우 에러 반환")

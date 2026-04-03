@@ -28,7 +28,7 @@ public class AttendanceRecordDTO {
     private LocalDateTime endTime;
 
     @Schema(description = "근무시간", example = "9시간 0분")
-    private String allTime;
+    private Long allTime;
 
     @Schema(description = "근태상태", example = "정상")
     private String state;

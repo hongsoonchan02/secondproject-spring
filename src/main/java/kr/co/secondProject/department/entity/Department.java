@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import kr.co.secondProject.department.dto.ReqDepartmentCreateDTO;
 import kr.co.secondProject.login.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,6 +49,18 @@ public class Department {
 	    this.dpName = dpName;
 	    this.dpDetail = dpDetail;
 	    this.dpManager = manager;
+	}
+	
+	public static Department of(ReqDepartmentCreateDTO request, Employee manager) {
+		Department dpEntity = Department.builder()
+				.dpCode(request.getDpCode())
+				.dpName(request.getDpName())
+				.dpDetail(request.getDpDetail())
+				.dpCreatedDate(LocalDateTime.now())
+				.dpManager(manager)
+				.build();
+		
+		return dpEntity;
 	}
 	
 }

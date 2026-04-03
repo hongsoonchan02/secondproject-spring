@@ -6,10 +6,10 @@ import kr.co.secondProject.department.dto.ReqDepartmentCreateDTO;
 import kr.co.secondProject.department.dto.ReqDepartmentUpdateDTO;
 import kr.co.secondProject.department.dto.ResCurrentDpListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentCreateDTO;
+import kr.co.secondProject.department.dto.ResDepartmentDetailDTO;
 import kr.co.secondProject.department.dto.ResDepartmentListDTO;
 import kr.co.secondProject.department.dto.ResDepartmentUpdateDTO;
 import kr.co.secondProject.department.dto.ResUpdateMemberListDTO;
-import kr.co.secondProject.department.entity.Department;
 
 public interface DepartmentService {
 	
@@ -25,7 +25,5 @@ public interface DepartmentService {
 
 	public List<ResUpdateMemberListDTO> updateList(Long id);
 	
-	public ResDepartmentUpdateDTO departmentDetail(Long id);
-	
-	public float averegeYear(Department department);
+	public ResDepartmentDetailDTO departmentDetail(Long id);
 }
