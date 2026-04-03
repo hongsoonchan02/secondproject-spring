@@ -1,6 +1,5 @@
 package kr.co.secondProject.attendance.service.Impl;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
@@ -17,9 +16,10 @@ import kr.co.secondProject.login.entity.Attendance;
 import kr.co.secondProject.login.entity.Employee;
 import kr.co.secondProject.login.repository.AttendanceRepository;
 import kr.co.secondProject.login.repository.EmployeeRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
-
+@Builder
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -79,48 +79,60 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 
     // 출근 등록
+    //  - 오늘 이미 출근 기록이 있으면 예외 (중복 출근 방지)
+    //  - 9시 이상 → "지각" / 미만 → "정상"
     @Override
-    @Transactional  // readOnly = false (쓰기 작업 override)
+    @Transactional
     public ResAttendanceDTO attendanceIn(ReqAttendanceDTO reqDto) {
-
+ 
+        LocalDateTime now        = LocalDateTime.now();
+        LocalDateTime todayStart = now.toLocalDate().atStartOfDay();
+ 
+        // 중복 출근 방지
+        attendanceRepository.findByEmployee_IdAndDate(reqDto.getEmployeeId(), todayStart)
+                .ifPresent(a -> {
+                    throw new RuntimeException("이미 출근 처리 되었습니다.");
+                });
+ 
         Employee employee = employeeRepository.findById(reqDto.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "직원을 찾을 수 없습니다. ID: " + reqDto.getEmployeeId()));
-
-        Attendance attendance = new Attendance();
-        attendance.setEmployee(employee);
-        attendance.setDate(reqDto.getDate());
-        attendance.setStartTime(reqDto.getStartTime());
-        attendance.setState("출근중");  // 퇴근 전 임시 상태
-        
-        return ResAttendanceDTO.from(attendance);
-    }
-
-    // 퇴근 등록
-    @Override
-    @Transactional
-    public ResAttendanceDTO attendanceOut(Long attendanceId, ReqAttendanceDTO reqDto) {
  
-        Attendance attendance = attendanceRepository.findById(attendanceId)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "근태 기록을 찾을 수 없습니다. ID: " + attendanceId));
+        // 9시 이상이면 지각, 미만이면 정상
+        String state = now.getHour() >= 9 ? "지각" : "정상";
  
-        attendance.setEndTime(reqDto.getEndTime());
- 
-        // 근무 시간
-        if (attendance.getStartTime() != null && reqDto.getEndTime() != null) {
-            attendance.calculateAllTime();
-        }
- 
-        // 근태 상태
-        if (attendance.getStartTime() != null) {
-            LocalDateTime standardTime = attendance.getDate().toLocalDate().atTime(9, 0);
-            attendance.calculateState(standardTime);
-        }
+        Attendance attendance = Attendance.builder()
+                .employee(employee)
+                .date(todayStart)
+                .startTime(now)
+                .state(state)
+                .build();
  
         return ResAttendanceDTO.from(attendanceRepository.save(attendance));
     }
-
+ 
+ 
+    // 퇴근 등록
+    //  - 오늘 출근 기록을 employeeId로 조회
+    //  - 퇴근 시각·근무시간·근태 상태 계산은 Attendance.checkOut() 에 위임
+    //  - 지각 기준 시각(09:00)은 Service에서 생성해 엔티티에 전달
+    @Override
+    @Transactional
+    public ResAttendanceDTO attendanceOut(Long employeeId) {
+ 
+        LocalDateTime todayStart = LocalDateTime.now().toLocalDate().atStartOfDay();
+ 
+        Attendance attendance = attendanceRepository
+                .findByEmployee_IdAndDate(employeeId, todayStart)
+                .orElseThrow(() -> new RuntimeException("출근 기록이 없습니다."));
+ 
+        LocalDateTime now          = LocalDateTime.now();
+        LocalDateTime standardTime = attendance.getDate().toLocalDate().atTime(9, 0);
+ 
+        attendance.checkOut(now, standardTime);
+ 
+        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
+    }
 
 
 }

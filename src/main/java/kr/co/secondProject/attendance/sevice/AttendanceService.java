@@ -35,5 +35,5 @@ public interface AttendanceService {
      * @param attendanceId 근태 ID
      * @param reqDto       퇴근 정보
      */
-    ResAttendanceDTO attendanceOut(Long attendanceId, ReqAttendanceDTO reqDto);
+    ResAttendanceDTO attendanceOut(Long employeeId);
 }

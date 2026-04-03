@@ -1,6 +1,5 @@
 package kr.co.secondProject.login.entity;
 
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -11,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "attendance")
 public class Attendance {
 
@@ -41,15 +44,19 @@ public class Attendance {
     private String state;           // 근태상태
 
     // 근태 상태 계산
-    public void calculateState(LocalDateTime standardTime) {
-        this.state = this.startTime.isAfter(standardTime) ? "지각" : "정상";
+    public void checkOut(LocalDateTime endTime, LocalDateTime standardTime) {
+        this.endTime = endTime;
+        this.allTime = calculateAllTime(endTime);
+        this.state   = calculateState(standardTime);
     }
  
-    // 총 근무 시간 계산한다.
-    public void calculateAllTime() {
-        Duration duration = Duration.between(this.startTime, this.endTime);
-        long hours   = duration.toHours();
-        long minutes = duration.toMinutesPart();
-        this.allTime = hours + "시간 " + minutes + "분";
+    // 근무 시간 계산
+    private String calculateAllTime(LocalDateTime endTime) {
+        return String.valueOf(Duration.between(this.startTime, endTime).toMinutes());
+    }
+ 
+    // 출근 시각이 기준 시각 초과 → "지각" / 이하 → "정상"
+    private String calculateState(LocalDateTime standardTime) {
+        return this.startTime.isAfter(standardTime) ? "지각" : "정상";
     }
 }
