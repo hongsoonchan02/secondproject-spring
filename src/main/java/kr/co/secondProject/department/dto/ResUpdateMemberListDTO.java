@@ -3,6 +3,7 @@ package kr.co.secondProject.department.dto;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.secondProject.login.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +29,15 @@ public class ResUpdateMemberListDTO {
 	
 	@Schema(description = "입사일", example = "2023.01.15")
 	private LocalDateTime hireDate;
+	
+	public static ResUpdateMemberListDTO from(Employee employee) {
+		return ResUpdateMemberListDTO.builder()
+		.empId(employee.getEmpId())
+		.name(employee.getName())
+		.position(employee.getPosition())
+		.email(employee.getEmail())
+		.hireDate(employee.getHireDate())
+		.build();
+	}
 
 }
