@@ -1,19 +1,18 @@
 package kr.co.secondProject.department.dto;
 
-import java.util.Optional;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.secondProject.department.entity.Department;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResDepartmentUpdateDTO {
+public class ResDepartmentDetailDTO {
+	
+	@Schema(description = "부서 번호", example = "1")
+	private Long dpNum;
 
 	@Schema(description = "부서 이름", example = "시스템 엔지니어링")
 	private String dpName;
@@ -27,17 +26,16 @@ public class ResDepartmentUpdateDTO {
 	@Schema(description = "부서 관리자 직책", example = "매니저")
 	private String dpManagerPosition;
 	
-	public static ResDepartmentUpdateDTO from(Department department) {
+	public static ResDepartmentDetailDTO from (Department dp) {
+		ResDepartmentDetailDTO response = ResDepartmentDetailDTO.builder()
+				.dpNum(dp.getDpNum())
+				.dpName(dp.getDpName())
+				.dpDetail(dp.getDpDetail())
+				.dpManagerName(dp.getDpManager().getName())
+				.dpManagerPosition(dp.getDpManager().getPosition())
+				.build();
 		
-		return ResDepartmentUpdateDTO.builder()
-		.dpManagerName(Optional.ofNullable(department.getDpManager())
-				.map(manager -> manager.getName())
-				.orElse(null))
-		.dpName(department.getDpName())
-		.dpDetail(department.getDpDetail()) 
-		.dpManagerPosition(Optional.ofNullable(department.getDpManager())
-				.map(manager -> manager.getPosition())
-				.orElse(null))
-		.build();
+		return response;		
 	}
+
 }
