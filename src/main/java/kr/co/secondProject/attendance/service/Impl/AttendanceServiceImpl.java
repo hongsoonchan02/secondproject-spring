@@ -38,8 +38,10 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Transactional(readOnly = true)
     public AttendanceStatsDto getAttendanceStats(Long employeeId) {
 
-        LocalDateTime startOfMonth = YearMonth.now().atDay(1).atStartOfDay();
-        LocalDateTime endOfMonth   = YearMonth.now().atEndOfMonth().atTime(23, 59, 59);
+    	YearMonth currentMonth = YearMonth.now();
+
+    	LocalDateTime startOfMonth = currentMonth.atDay(1).atStartOfDay();
+    	LocalDateTime endOfMonth = currentMonth.atEndOfMonth().atTime(23, 59, 59);
 
         List<Attendance> monthList = attendanceRepository
                 .findByEmployee_IdAndDateBetween(employeeId, startOfMonth, endOfMonth);
@@ -56,7 +58,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .filter(a -> "결근".equals(a.getState()))
                 .count();
 
-        int    totalDays = YearMonth.now().lengthOfMonth();
+    	int totalDays = currentMonth.lengthOfMonth();
         double score     = totalDays == 0
                 ? 0
                 : Math.round((workDays / (double) totalDays) * 1000.0) / 10.0;
@@ -108,7 +110,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .state(state)
                 .build();
  
-        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
+        return ResAttendanceDTO.from(attendance);
     }
  
  
@@ -131,7 +133,7 @@ public class AttendanceServiceImpl implements AttendanceService {
  
         attendance.checkOut(now, standardTime);
  
-        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
+        return ResAttendanceDTO.from(attendance);
     }
 
 
