@@ -1,16 +1,16 @@
 package kr.co.secondProject.login.entity;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,6 +31,23 @@ public class Attendance {
     private Long allTime;         // 근무시간
     private String state;           // 근태상태
 
+
+    public void checkOut(LocalDateTime endTime, LocalDateTime standardTime) {
+        this.endTime = endTime;
+        this.allTime = calculateAllTime(endTime);
+        this.state   = calculateState(standardTime);
+    }
+ 
+    // 근무시간 계산 (분 단위)
+    private Long calculateAllTime(LocalDateTime endTime) {
+        return Duration.between(this.startTime, endTime).toMinutes();
+    }
+ 
+    // 출근 시각이 기준 시각 초과 → "지각" / 이하 → "정상"
+    private String calculateState(LocalDateTime standardTime) {
+        return this.startTime.isAfter(standardTime) ? "지각" : "정상";
+    }
+    
     //퇴근 처리 메서드 <- 추가
     //this -> 지금 이 객체 자신을 가리킴
     //퇴근시각, 근무시간, 상태를 업데이트
@@ -39,4 +56,5 @@ public class Attendance {
         this.allTime = allTime;
         this.state =state;
     }
+
 }

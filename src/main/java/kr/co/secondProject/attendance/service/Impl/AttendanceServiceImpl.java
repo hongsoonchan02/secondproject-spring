@@ -1,6 +1,5 @@
 package kr.co.secondProject.attendance.service.Impl;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
@@ -17,12 +16,13 @@ import kr.co.secondProject.login.entity.Attendance;
 import kr.co.secondProject.login.entity.Employee;
 import kr.co.secondProject.login.repository.AttendanceRepository;
 import kr.co.secondProject.login.repository.EmployeeRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
-
+@Builder
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)  // 클래스 전체 기본값: 조회 전용
+@Transactional(readOnly = true)
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
@@ -35,6 +35,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     //  - 결근 일수 : state = "결근"
     //  - 근태 점수 : (출근 일수 / 이번 달 총 일수) × 100
     @Override
+    @Transactional(readOnly = true)
     public AttendanceStatsDto getAttendanceStats(Long employeeId) {
 
         LocalDateTime startOfMonth = YearMonth.now().atDay(1).atStartOfDay();
@@ -66,89 +67,72 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     // 근태 이력 전체 조회
     @Override
+    @Transactional(readOnly = true)
     public List<ResAttendanceDTO> getAttendanceList(Long employeeId) {
 
         return attendanceRepository
                 .findByEmployee_IdOrderByDateDesc(employeeId)
                 .stream()
-                .map(this::toResDto)
+                .map(ResAttendanceDTO::from)
                 .collect(Collectors.toList());
     }
 
 
     // 출근 등록
+    //  - 오늘 이미 출근 기록이 있으면 예외 (중복 출근 방지)
+    //  - 9시 이상 → "지각" / 미만 → "정상"
     @Override
-    @Transactional  // readOnly = false (쓰기 작업 override)
-    public ResAttendanceDTO AttendanceIn(ReqAttendanceDTO reqDto) {
-
+    @Transactional
+    public ResAttendanceDTO attendanceIn(ReqAttendanceDTO reqDto) {
+ 
+        LocalDateTime now        = LocalDateTime.now();
+        LocalDateTime todayStart = now.toLocalDate().atStartOfDay();
+ 
+        // 중복 출근 방지
+        attendanceRepository.findByEmployee_IdAndDate(reqDto.getEmployeeId(), todayStart)
+                .ifPresent(a -> {
+                    throw new RuntimeException("이미 출근 처리 되었습니다.");
+                });
+ 
         Employee employee = employeeRepository.findById(reqDto.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "직원을 찾을 수 없습니다. ID: " + reqDto.getEmployeeId()));
-
-        Attendance attendance = new Attendance();
-        attendance.setEmployee(employee);
-        attendance.setDate(reqDto.getDate());
-        attendance.setStartTime(reqDto.getStartTime());
-        attendance.setState("출근중");  // 퇴근 전 임시 상태
-
-        Attendance saved = attendanceRepository.save(attendance);
-        return toResDto(saved);
+ 
+        // 9시 이상이면 지각, 미만이면 정상
+        String state = now.getHour() >= 9 ? "지각" : "정상";
+ 
+        Attendance attendance = Attendance.builder()
+                .employee(employee)
+                .date(todayStart)
+                .startTime(now)
+                .state(state)
+                .build();
+ 
+        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
     }
-
-
+ 
+ 
     // 퇴근 등록
-    //  - 퇴근 시간 저장 후 근무시간 및 근태 상태 자동 계산
-    //  - 지각 기준: 출근 시각 09:00 초과 → "지각", 이하 → "정상"
+    //  - 오늘 출근 기록을 employeeId로 조회
+    //  - 퇴근 시각·근무시간·근태 상태 계산은 Attendance.checkOut() 에 위임
+    //  - 지각 기준 시각(09:00)은 Service에서 생성해 엔티티에 전달
     @Override
-    @Transactional  // readOnly = false (쓰기 작업 override)
-    public ResAttendanceDTO AttendanceOut(Long attendanceId, ReqAttendanceDTO reqDto) {
-
-        Attendance attendance = attendanceRepository.findById(attendanceId)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "근태 기록을 찾을 수 없습니다. ID: " + attendanceId));
-
-        attendance.setEndTime(reqDto.getEndTime());
-
-        // 근무 시간 계산
-        if (attendance.getStartTime() != null && reqDto.getEndTime() != null) {
-            Duration duration = Duration.between(attendance.getStartTime(), reqDto.getEndTime());
-            long hours   = duration.toHours();
-            long minutes = duration.toMinutesPart();
-            attendance.setAllTime(hours + "시간 " + minutes + "분");
-        }
-
-        // 지각 여부 판단 (기준 시간 변경 시 아래 atTime 수정)
-        if (attendance.getStartTime() != null) {
-            LocalDateTime standardTime = attendance.getDate().toLocalDate().atTime(9, 0);
-            attendance.setState(
-                    attendance.getStartTime().isAfter(standardTime) ? "지각" : "정상");
-        }
-
-        Attendance saved = attendanceRepository.save(attendance);
-        return toResDto(saved);
+    @Transactional
+    public ResAttendanceDTO attendanceOut(Long employeeId, ReqAttendanceDTO reqDto) {
+ 
+        LocalDateTime todayStart = LocalDateTime.now().toLocalDate().atStartOfDay();
+ 
+        Attendance attendance = attendanceRepository
+                .findByEmployee_IdAndDate(employeeId, todayStart)
+                .orElseThrow(() -> new RuntimeException("출근 기록이 없습니다."));
+ 
+        LocalDateTime now          = LocalDateTime.now();
+        LocalDateTime standardTime = attendance.getDate().toLocalDate().atTime(9, 0);
+ 
+        attendance.checkOut(now, standardTime);
+ 
+        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
     }
 
-    /*
-     * ResDTO로 이동 및 호출하여 사용
-     * */
-    // Entity → ResAttendanceDTO 변환
-    private ResAttendanceDTO toResDto(Attendance attendance) {
-    	
-    	/*
-    	 * Setter말고 build 사용 권장
-    	 * */
-        ResAttendanceDTO dto = new ResAttendanceDTO();
-        dto.setAttendanceId(attendance.getAttendanceId());
-        dto.setDate(attendance.getDate());
-        dto.setStartTime(attendance.getStartTime());
-        dto.setEndTime(attendance.getEndTime());
-        dto.setAllTime(attendance.getAllTime());
-        dto.setState(attendance.getState());
 
-        if (attendance.getEmployee() != null) {
-            dto.setEmployeeId(attendance.getEmployee().getId());
-            dto.setEmployeeName(attendance.getEmployee().getName());
-        }
-        return dto;
-    }
 }
