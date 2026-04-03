@@ -18,5 +18,4 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     //이번달 출근 기록 조회 (년도 +월로 필터)
     List<Attendance> findByEmployee_IdAndDateBetween(Long employeeId,
                                            LocalDateTime start, LocalDateTime end);
-
 }
