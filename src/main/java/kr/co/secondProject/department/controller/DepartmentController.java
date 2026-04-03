@@ -85,6 +85,15 @@ public class DepartmentController {
 				ResponseEntity.status(HttpStatus.OK).body(response) :
 				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
+	@Operation(summary = "부서 조회", description = "특정 부서 조회용")
+	@GetMapping("/{id}")
+	public ResponseEntity<ResDepartmentUpdateDTO> detail(@PathVariable Long id) {
+		ResDepartmentUpdateDTO response = departmentService.departmentDetail(id);
+		
+		return (response != null) ?
+				ResponseEntity.status(HttpStatus.OK).body(response) :
+				ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
 	
 	@Operation(summary = "부서 삭제", description = "부서 id에 맞는 부서 삭제")
 	@DeleteMapping("/{id}")

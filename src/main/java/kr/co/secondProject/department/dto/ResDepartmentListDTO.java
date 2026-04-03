@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResDepartmentListDTO {
+	
+	@Schema(description = "부서 번호", example = "1")
+	private Long dpNum;
 
 	@Schema(description = "부서 코드", example = "EXP-564")
 	private String dpCode; 
