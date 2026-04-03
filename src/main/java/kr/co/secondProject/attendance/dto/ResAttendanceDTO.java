@@ -37,7 +37,7 @@ public class ResAttendanceDTO {
     private LocalDateTime endTime;
 
     @Schema(description = "근무 시간", example = "9시간 0분")
-    private String allTime;
+    private Long allTime;
 
     @Schema(
         description = "근태 상태",

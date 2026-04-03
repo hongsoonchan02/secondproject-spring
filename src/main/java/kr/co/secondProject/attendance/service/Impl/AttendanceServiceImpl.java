@@ -118,7 +118,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     //  - 지각 기준 시각(09:00)은 Service에서 생성해 엔티티에 전달
     @Override
     @Transactional
-    public ResAttendanceDTO attendanceOut(Long employeeId) {
+    public ResAttendanceDTO attendanceOut(Long employeeId, ReqAttendanceDTO reqDto) {
  
         LocalDateTime todayStart = LocalDateTime.now().toLocalDate().atStartOfDay();
  
