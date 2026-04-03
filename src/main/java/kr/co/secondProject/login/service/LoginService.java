@@ -5,6 +5,7 @@ import kr.co.secondProject.login.dto.LoginResDTO;
 import kr.co.secondProject.login.entity.Employee;
 import kr.co.secondProject.login.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     private final EmployeeRepository employeeRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     //로그인 처리
     public LoginResDTO login(LoginReqDTO req){
