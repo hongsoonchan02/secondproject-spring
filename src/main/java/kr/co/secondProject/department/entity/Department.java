@@ -1,5 +1,7 @@
 package kr.co.secondProject.department.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +40,9 @@ public class Department {
 	@OneToOne
 	@JoinColumn(name="dp_manager")
 	private Employee dpManager; // Employee 테이블과 조인 부서장 번호
+	
+	@Column
+	private LocalDateTime dpCreatedDate;
 	
 	public void update(String dpName, String dpDetail, Employee manager) {
 	    this.dpName = dpName;
