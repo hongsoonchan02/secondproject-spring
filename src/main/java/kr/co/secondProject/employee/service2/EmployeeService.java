@@ -1,4 +1,4 @@
-package kr.co.secondProject.employee.service.Impl;
+package kr.co.secondProject.employee.service2;
 
 import java.util.List;
 
@@ -6,15 +6,15 @@ import kr.co.secondProject.employee.dto.EmployeeCreateRequestDto;
 import kr.co.secondProject.employee.dto.EmployeeResponseDto;
 import kr.co.secondProject.employee.dto.EmployeeUpdateRequestDto;
 
-
-
 public interface EmployeeService {
 
-    List<EmployeeResponseDto> getEmployees(String name, String status);
+    List<EmployeeResponseDto> getEmployees(String name);
+
+    EmployeeResponseDto getEmployee(Long id);
 
     EmployeeResponseDto createEmployee(EmployeeCreateRequestDto requestDto);
 
     EmployeeResponseDto updateEmployee(Long id, EmployeeUpdateRequestDto requestDto);
 
-    void resignEmployee(Long id);
+    void deleteEmployee(Long id);
 }
