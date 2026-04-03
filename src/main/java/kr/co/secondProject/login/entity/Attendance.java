@@ -1,6 +1,7 @@
 package kr.co.secondProject.login.entity;
 
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -39,5 +40,16 @@ public class Attendance {
 
     private String state;           // 근태상태
 
-
+    // 근태 상태 계산
+    public void calculateState(LocalDateTime standardTime) {
+        this.state = this.startTime.isAfter(standardTime) ? "지각" : "정상";
+    }
+ 
+    // 총 근무 시간 계산한다.
+    public void calculateAllTime() {
+        Duration duration = Duration.between(this.startTime, this.endTime);
+        long hours   = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        this.allTime = hours + "시간 " + minutes + "분";
+    }
 }

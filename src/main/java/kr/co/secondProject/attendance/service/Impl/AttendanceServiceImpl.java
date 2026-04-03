@@ -96,36 +96,29 @@ public class AttendanceServiceImpl implements AttendanceService {
         return ResAttendanceDTO.from(attendance);
     }
 
-
     // 퇴근 등록
-    //  - 퇴근 시간 저장 후 근무시간 및 근태 상태 자동 계산
-    //  - 지각 기준: 출근 시각 09:00 초과 → "지각", 이하 → "정상"
     @Override
-    @Transactional  // readOnly = false (쓰기 작업 override)
+    @Transactional
     public ResAttendanceDTO attendanceOut(Long attendanceId, ReqAttendanceDTO reqDto) {
-
+ 
         Attendance attendance = attendanceRepository.findById(attendanceId)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "근태 기록을 찾을 수 없습니다. ID: " + attendanceId));
-
+ 
         attendance.setEndTime(reqDto.getEndTime());
-
-        // 근무 시간 계산
+ 
+        // 근무 시간
         if (attendance.getStartTime() != null && reqDto.getEndTime() != null) {
-            Duration duration = Duration.between(attendance.getStartTime(), reqDto.getEndTime());
-            long hours   = duration.toHours();
-            long minutes = duration.toMinutesPart();
-            attendance.setAllTime(hours + "시간 " + minutes + "분");
+            attendance.calculateAllTime();
         }
-
-        // 지각 여부 판단 (기준 시간 변경 시 아래 atTime 수정)
+ 
+        // 근태 상태
         if (attendance.getStartTime() != null) {
             LocalDateTime standardTime = attendance.getDate().toLocalDate().atTime(9, 0);
-            attendance.setState(
-                    attendance.getStartTime().isAfter(standardTime) ? "지각" : "정상");
+            attendance.calculateState(standardTime);
         }
-
-        return ResAttendanceDTO.from(attendance);
+ 
+        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
     }
 
 
