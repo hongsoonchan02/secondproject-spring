@@ -110,7 +110,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .state(state)
                 .build();
  
-        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
+        return ResAttendanceDTO.from(attendance);
     }
  
  
@@ -133,7 +133,7 @@ public class AttendanceServiceImpl implements AttendanceService {
  
         attendance.checkOut(now, standardTime);
  
-        return ResAttendanceDTO.from(attendanceRepository.save(attendance));
+        return ResAttendanceDTO.from(attendance);
     }
 
 
